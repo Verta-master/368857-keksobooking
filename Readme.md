@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Yelena Vertyagina](https://up.htmlacademy.ru/javascript/11/user/368857).
-* Наставник: `Неизвестно`.
+* Наставник: [Александр Большов](https://htmlacademy.ru/profile/id179111).
 
 ---
 
