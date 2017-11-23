@@ -33,6 +33,7 @@ for (i = 0; i < OFFER_TITLES.length; i++) {
 function createTicket() {
   var locationX = getRandomInt(300, 900);
   var locationY = getRandomInt(100, 500);
+  var featureLength = getRandomInt(0, OFFER_FEATURES.length);
   var ticket = {
     author: {
       avatar: 'img/avatars/user0' + avatarNumbers.splice(getRandomInt(0, avatarNumbers.length), 1) + '.png'
@@ -55,9 +56,10 @@ function createTicket() {
       y: locationY
     }
   };
-//  for (i = 0; i < getRandomInt(0, OFFER_FEATURES.length); i++) {
-//    ticket.offer.features[i] = OFFER_FEATURES[getRandomInt(0, OFFER_FEATURES.length)];
-//  }
+  ticket.offer.features.length = featureLength;
+  for (var j = 0; j < featureLength; j++) {
+    ticket.offer.features[j] = OFFER_FEATURES[getRandomInt(0, OFFER_FEATURES.length)];
+  }
   return ticket;
 }
 
