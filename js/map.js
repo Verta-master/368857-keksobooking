@@ -26,7 +26,7 @@ for (var i = 0; i < TICKETS_NUMBER; i++) {
   avatarNumbers[i] = i + 1;
 }
 
-for (var i = 0; i < OFFER_TITLES.length; i++) {
+for (i = 0; i < OFFER_TITLES.length; i++) {
   arrTitles[i] = OFFER_TITLES[i];
 }
 
@@ -54,21 +54,21 @@ function createTicket() {
       x: locationX,
       y: locationY
     }
-  }
-  for (var i = 0; i < getRandomInt(0, OFFER_FEATURES.length); i++) {
+  };
+  for (i = 0; i < getRandomInt(0, OFFER_FEATURES.length); i++) {
     ticket.offer.features[i] = OFFER_FEATURES[getRandomInt(0, OFFER_FEATURES.length)];
   }
   return ticket;
 }
 
-for (var i = 0; i < TICKETS_NUMBER; i++) {
+for (i = 0; i < TICKETS_NUMBER; i++) {
   tickets.push(createTicket());
 }
 
 // Отрисовка маркеров
 map.classList.remove('map--faded');
 
-for (var i = 0; i < TICKETS_NUMBER; i++) {
+for (i = 0; i < TICKETS_NUMBER; i++) {
   var coordLeft = tickets[i].location.x - pinWidth / 2;
   var coordTop = tickets[i].location.y - pinHeight;
   var newPin = '<button style="left: ' + String(coordLeft) + 'px; top: ' + String(coordTop) + 'px;" class="map__pin"><img src="' + String(tickets[i].author.avatar) + '" width="' + String(pinWidth) + '" height="' + String(pinHeight) + '" draggable="false"></button>';
