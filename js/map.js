@@ -55,15 +55,16 @@ function createTicket() {
       y: locationY
     }
   };
-  for (i = 0; i < getRandomInt(0, OFFER_FEATURES.length); i++) {
-    ticket.offer.features[i] = OFFER_FEATURES[getRandomInt(0, OFFER_FEATURES.length)];
-  }
+//  for (i = 0; i < getRandomInt(0, OFFER_FEATURES.length); i++) {
+//    ticket.offer.features[i] = OFFER_FEATURES[getRandomInt(0, OFFER_FEATURES.length)];
+//  }
   return ticket;
 }
 
 for (i = 0; i < TICKETS_NUMBER; i++) {
   tickets.push(createTicket());
 }
+console.log(tickets);
 
 // Отрисовка маркеров
 map.classList.remove('map--faded');
@@ -75,3 +76,31 @@ for (i = 0; i < TICKETS_NUMBER; i++) {
   mapPin.insertAdjacentHTML('beforeend', newPin);
 }
 mapPin.appendChild(fragment);
+
+
+//var mapCard = document.querySelector('.map__card');
+
+//var renderCard = function(ticket) {
+//  var card = mapCard.content.cloneNode(true);
+//  card.querySelector(h3).textContent = ticket.offer.title;
+//  card.querySelector(small).textContent = ticket.offer.address;
+//  card.querySelector('.popup__price').textContent = ticket.offer.price + '&#x20bd;/ночь';
+//
+//  switch (ticket.offer.type) {
+//    case 'flat':
+//      card.querySelector(h4).textContent = 'Квартира';
+//      break;
+//    case 'house':
+//      card.querySelector(h4).textContent = 'Дом';
+//      break;
+//    case 'bungalo':
+//      card.querySelector(h4).textContent = 'Дом';
+//      break;
+//  }
+//
+//  return card;
+//}
+
+//  renderCard(tickets[i]);
+//  map.insertAdjacentHTML('beforeend', renderCard(tickets[i]));
+//map.appendChild(fragment);
