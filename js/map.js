@@ -100,12 +100,10 @@ function drawPin(ticket) {
   newPin.querySelector('img').width = pinWidth;
   newPin.querySelector('img').height = pinHeight;
   newPin.style = 'left: ' + String(coordLeft) + 'px; top: ' + String(coordTop) + 'px;';
-  return newPin;
+  fragment.appendChild(newPin);
 }
 
-for (i = 0; i < TICKETS_NUMBER; i++) {
-  fragment.appendChild(drawPin(tickets[i]));
-}
+tickets.forEach(drawPin);
 mapPin.appendChild(fragment);
 
 // Вывод карточки
