@@ -37,7 +37,7 @@ var map = document.querySelector('.map');
 var mapPin = document.querySelector('.map__pins');
 var fragment = document.createDocumentFragment();
 
-// Нахождение случайного целого из диапазона
+// Случайное целое из диапазона (min, max), не включая max
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
@@ -59,7 +59,6 @@ function getUniqueArray(customArray) {
 function createTicket(number) {
   var locationX = getRandomInt(coords.x.min, coords.x.max);
   var locationY = getRandomInt(coords.y.min, coords.y.max);
-
   var ticket = {
     author: {
       avatar: 'img/avatars/user0' + String(number) + '.png'
@@ -93,12 +92,21 @@ for (var i = 0; i < TICKETS_NUMBER; i++) {
 // Отрисовка маркеров
 map.classList.remove('map--faded');
 
-for (i = 0; i < TICKETS_NUMBER; i++) {
-  var coordLeft = tickets[i].location.x - pinWidth / 2;
-  var coordTop = tickets[i].location.y - pinHeight;
-  var newPin = '<button style="left: ' + String(coordLeft) + 'px; top: ' + String(coordTop) + 'px;" class="map__pin"><img src="' + String(tickets[i].author.avatar) + '" width="' + String(pinWidth) + '" height="' + String(pinHeight) + '" draggable="false"></button>';
-  mapPin.insertAdjacentHTML('beforeend', newPin);
+function drawPin(ticket) {
+  var coordLeft = ticket.location.x - pinWidth / 2;
+  var coordTop = ticket.location.y - pinHeight;
+  var newPin = document.querySelector('template').content.querySelector('.map__pin').cloneNode(true);
+  newPin.querySelector('img').src = ticket.author.avatar;
+  newPin.querySelector('img').width = pinWidth;
+  newPin.querySelector('img').height = pinHeight;
+  newPin.style = 'left: ' + String(coordLeft) + 'px; top: ' + String(coordTop) + 'px;';
+  return newPin;
 }
+
+for (i = 0; i < TICKETS_NUMBER; i++) {
+  fragment.appendChild(drawPin(tickets[i]));
+}
+mapPin.appendChild(fragment);
 
 // Вывод карточки
 function getOfferType(type) {
@@ -116,6 +124,10 @@ function getOfferType(type) {
   return offerType;
 }
 
+var getFeaturesList = function (element) {
+  return '<li class="feature feature--' + element + '"></li>';
+};
+
 var renderCard = function (newCard) {
   var card = cardTemplate.cloneNode(true);
   card.querySelector('h3').textContent = newCard.offer.title;
@@ -124,13 +136,8 @@ var renderCard = function (newCard) {
   card.querySelector('h4').textContent = getOfferType(newCard.offer.type);
   card.querySelector('p:nth-of-type(3)').textContent = newCard.offer.room + ' комнаты для ' + newCard.offer.guests + ' гостей';
   card.querySelector('p:nth-of-type(4)').textContent = 'Заезд после ' + newCard.offer.checkin + ' выезд до ' + newCard.offer.checkout;
-
   card.querySelector('.popup__features').innerHTML = '';
-  for (var k = 0; k < newCard.offer.features.length; k++) {
-    var featureName = '<li class="feature feature--' + newCard.offer.features[k] + '"></li>';
-    card.querySelector('.popup__features').insertAdjacentHTML('beforeend', featureName);
-  }
-
+  card.querySelector('.popup__features').insertAdjacentHTML('beforeend', newCard.offer.features.map(getFeaturesList).join(' '));
   card.querySelector('p:last-of-type').textContent = newCard.offer.description;
   card.querySelector('.popup__avatar').src = newCard.author.avatar;
   return card;
