@@ -9,7 +9,6 @@ var TICKETS_NUMBER = 8;
 
 var pinWidth = 40;
 var pinHeight = 40;
-var tickets = [];
 var arrTitles = OFFER_TITLES.slice();
 var coords = {
   x: {
@@ -32,6 +31,11 @@ var rooms = {
 var guests = {
   min: 0,
   max: 10
+};
+var offerType = {
+  flat: 'Квартира',
+  house: 'Дом',
+  bungalo: 'Бунгало'
 };
 var map = document.querySelector('.map');
 var mapPin = document.querySelector('.map__pins');
@@ -85,9 +89,15 @@ function createTicket(number) {
   return ticket;
 }
 
-for (var i = 0; i < TICKETS_NUMBER; i++) {
-  tickets.push(createTicket(i + 1));
+function getTickets(numberOfElements) {
+  var arrayOfTickets = [];
+  for (var i = 0; i < numberOfElements; i++) {
+    arrayOfTickets.push(createTicket(i + 1));
+  }
+  return arrayOfTickets;
 }
+
+var tickets = getTickets(TICKETS_NUMBER);
 
 // Отрисовка маркеров
 map.classList.remove('map--faded');
@@ -99,7 +109,8 @@ function drawPin(ticket) {
   newPin.querySelector('img').src = ticket.author.avatar;
   newPin.querySelector('img').width = pinWidth;
   newPin.querySelector('img').height = pinHeight;
-  newPin.style = 'left: ' + String(coordLeft) + 'px; top: ' + String(coordTop) + 'px;';
+  newPin.style.left = String(coordLeft) + 'px';
+  newPin.style.top = String(coordTop) + 'px';
   fragment.appendChild(newPin);
 }
 
@@ -107,31 +118,16 @@ tickets.forEach(drawPin);
 mapPin.appendChild(fragment);
 
 // Вывод карточки
-function getOfferType(type) {
-  var offerType;
-  switch (type) {
-    case 'flat':
-      offerType = 'Квартира';
-      break;
-    case 'house':
-      offerType = 'Дом';
-      break;
-    case 'bungalo':
-      offerType = 'Бунгало';
-  }
-  return offerType;
+function getFeaturesList(element) {
+  return '<li class="feature feature--' + element + '"></li>';
 }
 
-var getFeaturesList = function (element) {
-  return '<li class="feature feature--' + element + '"></li>';
-};
-
-var renderCard = function (newCard) {
+function renderCard(newCard) {
   var card = cardTemplate.cloneNode(true);
   card.querySelector('h3').textContent = newCard.offer.title;
   card.querySelector('small').textContent = newCard.offer.address;
   card.querySelector('.popup__price').innerHTML = newCard.offer.price + '&#x20bd;/ночь';
-  card.querySelector('h4').textContent = getOfferType(newCard.offer.type);
+  card.querySelector('h4').textContent = offerType[newCard.offer.type];
   card.querySelector('p:nth-of-type(3)').textContent = newCard.offer.room + ' комнаты для ' + newCard.offer.guests + ' гостей';
   card.querySelector('p:nth-of-type(4)').textContent = 'Заезд после ' + newCard.offer.checkin + ' выезд до ' + newCard.offer.checkout;
   card.querySelector('.popup__features').innerHTML = '';
@@ -139,7 +135,7 @@ var renderCard = function (newCard) {
   card.querySelector('p:last-of-type').textContent = newCard.offer.description;
   card.querySelector('.popup__avatar').src = newCard.author.avatar;
   return card;
-};
+}
 
 var cardTemplate = document.querySelector('template').content.querySelector('.map__card');
 fragment.appendChild(renderCard(tickets[0]));
