@@ -102,15 +102,21 @@ var tickets = getTickets(TICKETS_NUMBER);
 // Отрисовка маркеров
 map.classList.remove('map--faded');
 
+function getPinShiftX(locationX) {
+  return locationX - pinWidth / 2;
+}
+
+function getPinShiftY(locationY) {
+  return locationY - pinHeight;
+}
+
 function drawPin(ticket) {
-  var coordLeft = ticket.location.x - pinWidth / 2;
-  var coordTop = ticket.location.y - pinHeight;
   var newPin = document.querySelector('template').content.querySelector('.map__pin').cloneNode(true);
   newPin.querySelector('img').src = ticket.author.avatar;
   newPin.querySelector('img').width = pinWidth;
   newPin.querySelector('img').height = pinHeight;
-  newPin.style.left = String(coordLeft) + 'px';
-  newPin.style.top = String(coordTop) + 'px';
+  newPin.style.left = getPinShiftX(ticket.location.x) + 'px';
+  newPin.style.top = getPinShiftY(ticket.location.y) + 'px';
   fragment.appendChild(newPin);
 }
 
