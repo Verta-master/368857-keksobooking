@@ -39,6 +39,9 @@ var offerType = {
 };
 var map = document.querySelector('.map');
 var mapPin = document.querySelector('.map__pins');
+var formField = document.querySelectorAll('fieldset');
+var noticeForm = document.querySelector('.notice__form');
+var mainPin = document.querySelector('.map__pin--main');
 var fragment = document.createDocumentFragment();
 
 // Случайное целое из диапазона (min, max), не включая max
@@ -99,9 +102,26 @@ function getTickets(numberOfElements) {
 
 var tickets = getTickets(TICKETS_NUMBER);
 
-// Отрисовка маркеров
-map.classList.remove('map--faded');
+// Начальное состояние
+function setDisabled(item) {
+  item.setAttribute('disabled', 'disabled');
+}
 
+function removeDisabled(item) {
+  item.removeAttribute('disabled', 'disabled');
+}
+
+formField.forEach(setDisabled);
+
+if (map.classList.contains('map--faded') === false) {
+  map.classList.add('map--faded');
+}
+
+if (noticeForm.classList.contains('notice__form--disabled') === false) {
+  noticeForm.classList.add('notice__form--disabled');
+}
+
+// Отрисовка маркеров
 function getPinShiftX(locationX) {
   return locationX - pinWidth / 2;
 }
@@ -120,8 +140,15 @@ function drawPin(ticket) {
   fragment.appendChild(newPin);
 }
 
-tickets.forEach(drawPin);
-mapPin.appendChild(fragment);
+function onMainPinMouseUp() {
+  map.classList.remove('map--faded');
+  noticeForm.classList.remove('notice__form--disabled');
+  formField.forEach(removeDisabled);
+  tickets.forEach(drawPin);
+  mapPin.appendChild(fragment);
+}
+
+mainPin.addEventListener('mouseup', onMainPinMouseUp);
 
 // Вывод карточки
 function getFeaturesList(element) {
@@ -129,6 +156,7 @@ function getFeaturesList(element) {
 }
 
 function renderCard(newCard) {
+  var cardTemplate = document.querySelector('template').content.querySelector('.map__card');
   var card = cardTemplate.cloneNode(true);
   card.querySelector('h3').textContent = newCard.offer.title;
   card.querySelector('small').textContent = newCard.offer.address;
@@ -143,6 +171,15 @@ function renderCard(newCard) {
   return card;
 }
 
-var cardTemplate = document.querySelector('template').content.querySelector('.map__card');
-fragment.appendChild(renderCard(tickets[0]));
-map.appendChild(fragment);
+// var cardTemplate = document.querySelector('template').content.querySelector('.map__card');
+// fragment.appendChild(renderCard(tickets[0]));
+// map.appendChild(fragment);
+
+function onPinClick() {
+  var target = event.target;
+  target.classList.add('map__pin--active');
+  // тут что-то нужно сделать, чтобы не tickets[0] подставлять, а соответствующий элемент
+  fragment.appendChild(renderCard(tickets[0]));
+  map.appendChild(fragment);
+}
+mapPin.addEventListener('click', onPinClick);
