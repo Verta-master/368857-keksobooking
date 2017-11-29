@@ -206,9 +206,13 @@ function onCardCloserKeydown(evt) {
   }
 }
 
-function onPinClick() {
-  var target = event.target;
-  if (target.classList.contains('map__pin')) {
+function onPinClick(evt) {
+  var target = evt.target;
+  var targetButton = target.parentNode;
+  if (targetButton.classList.contains('map__pin')) {
+    target = targetButton;
+  }
+  if (target.classList.contains('map__pin') && (target.classList.contains('map__pin--main') === false)) {
     var pinNumber = parseInt(target.getAttribute('data-number'), 10);
     var pins = document.querySelectorAll('.map__pin');
     pins.forEach(deactivatePin);
