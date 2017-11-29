@@ -45,6 +45,8 @@ var formFields = document.querySelectorAll('fieldset');
 var noticeForm = document.querySelector('.notice__form');
 var mainPin = document.querySelector('.map__pin--main');
 var fragment = document.createDocumentFragment();
+var cardTemplate = document.querySelector('template').content.querySelector('.map__card');
+var card = cardTemplate.cloneNode(true);
 
 // Случайное целое из диапазона (min, max), не включая max
 function getRandomInt(min, max) {
@@ -104,25 +106,6 @@ function getTickets(numberOfElements) {
 
 var tickets = getTickets(TICKETS_NUMBER);
 
-// Начальное состояние
-function setDisabled(item) {
-  item.setAttribute('disabled', 'disabled');
-}
-
-function removeDisabled(item) {
-  item.removeAttribute('disabled', 'disabled');
-}
-
-formFields.forEach(setDisabled);
-
-if (map.classList.contains('map--faded') === false) {
-  map.classList.add('map--faded');
-}
-
-if (noticeForm.classList.contains('notice__form--disabled') === false) {
-  noticeForm.classList.add('notice__form--disabled');
-}
-
 // Отрисовка маркеров
 function getPinShiftX(locationX) {
   return locationX - pinWidth / 2;
@@ -151,8 +134,6 @@ function onMainPinMouseUp() {
   mapPin.appendChild(fragment);
 }
 
-mainPin.addEventListener('mouseup', onMainPinMouseUp);
-
 // Отрисовка карточки
 function getFeaturesList(element) {
   return '<li class="feature feature--' + element + '"></li>';
@@ -172,12 +153,8 @@ function renderCard(newCard) {
   return card;
 }
 
-var cardTemplate = document.querySelector('template').content.querySelector('.map__card');
-var card = cardTemplate.cloneNode(true);
 fragment.appendChild(renderCard(tickets[0]));
 map.appendChild(fragment);
-var cardPopup = document.querySelector('.popup');
-cardPopup.classList.add('hidden');
 
 // Обработка событий вывода карточки
 function deactivatePin(pin) {
@@ -207,19 +184,16 @@ function onCardCloserKeydown(evt) {
 }
 
 function onPinClick(evt) {
-  var target = evt.target;
-  var targetButton = target.parentNode;
-  if (targetButton.classList.contains('map__pin')) {
-    target = targetButton;
-  }
-  if (target.classList.contains('map__pin') && (target.classList.contains('map__pin--main') === false)) {
-    var pinNumber = parseInt(target.getAttribute('data-number'), 10);
+  var targetPin = evt.target;
+  var targetButton = targetPin.parentNode;
+  targetButton.classList.contains('map__pin') ? targetPin = targetButton : targetPin = evt.target;
+  if (targetPin.classList.contains('map__pin') && (targetPin.classList.contains('map__pin--main') === false)) {
+    var pinNumber = parseInt(targetPin.getAttribute('data-number'), 10);
     var pins = document.querySelectorAll('.map__pin');
     pins.forEach(deactivatePin);
-    target.classList.add('map__pin--active');
+    targetPin.classList.add('map__pin--active');
     renderCard(tickets[pinNumber]);
     cardPopup.classList.remove('hidden');
-
     var cardCloser = document.querySelector('.popup__close');
     cardCloser.addEventListener('click', onCardCloserClick);
     cardCloser.addEventListener('keydown', onCardCloserKeydown);
@@ -233,5 +207,27 @@ function onPinKeydown(evt) {
   }
 }
 
+mainPin.addEventListener('mouseup', onMainPinMouseUp);
 mapPin.addEventListener('click', onPinClick);
 mapPin.addEventListener('keydown', onPinKeydown);
+
+// Начальное состояние
+function setDisabled(item) {
+  item.setAttribute('disabled', 'disabled');
+}
+
+function removeDisabled(item) {
+  item.removeAttribute('disabled', 'disabled');
+}
+
+var cardPopup = document.querySelector('.popup');
+cardPopup.classList.add('hidden');
+formFields.forEach(setDisabled);
+
+if (map.classList.contains('map--faded') === false) {
+  map.classList.add('map--faded');
+}
+
+if (noticeForm.classList.contains('notice__form--disabled') === false) {
+  noticeForm.classList.add('notice__form--disabled');
+}
