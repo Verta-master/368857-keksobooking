@@ -6,6 +6,8 @@ var OFFER_CHECKINS = ['12:00', '13:00', '14:00'];
 var OFFER_CHECKOUTS = ['12:00', '13:00', '14:00'];
 var OFFER_FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var TICKETS_NUMBER = 8;
+var ESC_KEYCODE = 27;
+var ENTER_KEYCODE = 13;
 
 var pinWidth = 40;
 var pinHeight = 40;
@@ -39,7 +41,7 @@ var offerType = {
 };
 var map = document.querySelector('.map');
 var mapPin = document.querySelector('.map__pins');
-var formField = document.querySelectorAll('fieldset');
+var formFields = document.querySelectorAll('fieldset');
 var noticeForm = document.querySelector('.notice__form');
 var mainPin = document.querySelector('.map__pin--main');
 var fragment = document.createDocumentFragment();
@@ -111,7 +113,7 @@ function removeDisabled(item) {
   item.removeAttribute('disabled', 'disabled');
 }
 
-formField.forEach(setDisabled);
+formFields.forEach(setDisabled);
 
 if (map.classList.contains('map--faded') === false) {
   map.classList.add('map--faded');
@@ -130,34 +132,33 @@ function getPinShiftY(locationY) {
   return locationY - pinHeight;
 }
 
-function drawPin(ticket) {
+function drawPin(ticket, ticketNumber) {
   var newPin = document.querySelector('template').content.querySelector('.map__pin').cloneNode(true);
   newPin.querySelector('img').src = ticket.author.avatar;
   newPin.querySelector('img').width = pinWidth;
   newPin.querySelector('img').height = pinHeight;
   newPin.style.left = getPinShiftX(ticket.location.x) + 'px';
   newPin.style.top = getPinShiftY(ticket.location.y) + 'px';
+  newPin.setAttribute('data-number', String(ticketNumber));
   fragment.appendChild(newPin);
 }
 
 function onMainPinMouseUp() {
   map.classList.remove('map--faded');
   noticeForm.classList.remove('notice__form--disabled');
-  formField.forEach(removeDisabled);
+  formFields.forEach(removeDisabled);
   tickets.forEach(drawPin);
   mapPin.appendChild(fragment);
 }
 
 mainPin.addEventListener('mouseup', onMainPinMouseUp);
 
-// Вывод карточки
+// Отрисовка карточки
 function getFeaturesList(element) {
   return '<li class="feature feature--' + element + '"></li>';
 }
 
 function renderCard(newCard) {
-  var cardTemplate = document.querySelector('template').content.querySelector('.map__card');
-  var card = cardTemplate.cloneNode(true);
   card.querySelector('h3').textContent = newCard.offer.title;
   card.querySelector('small').textContent = newCard.offer.address;
   card.querySelector('.popup__price').innerHTML = newCard.offer.price + '&#x20bd;/ночь';
@@ -171,15 +172,62 @@ function renderCard(newCard) {
   return card;
 }
 
-// var cardTemplate = document.querySelector('template').content.querySelector('.map__card');
-// fragment.appendChild(renderCard(tickets[0]));
-// map.appendChild(fragment);
+var cardTemplate = document.querySelector('template').content.querySelector('.map__card');
+var card = cardTemplate.cloneNode(true);
+fragment.appendChild(renderCard(tickets[0]));
+map.appendChild(fragment);
+var cardPopup = document.querySelector('.popup');
+cardPopup.classList.add('hidden');
+
+// Обработка событий вывода карточки
+function deactivatePin(pin) {
+  if (pin.classList.contains('map__pin--active')) {
+    pin.classList.remove('map__pin--active');
+  }
+}
+
+function onCardCloserClick() {
+  cardPopup.classList.add('hidden');
+  var activePin = document.querySelector('.map__pin--active');
+  if (activePin.classList.contains('map__pin--active')) {
+    activePin.classList.remove('map__pin--active');
+  }
+}
+
+function onCardKeydown(evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    onCardCloserClick();
+  }
+}
+
+function onCardCloserKeydown(evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    onCardCloserClick();
+  }
+}
 
 function onPinClick() {
   var target = event.target;
-  target.classList.add('map__pin--active');
-  // тут что-то нужно сделать, чтобы не tickets[0] подставлять, а соответствующий элемент
-  fragment.appendChild(renderCard(tickets[0]));
-  map.appendChild(fragment);
+  if (target.classList.contains('map__pin')) {
+    var pinNumber = parseInt(target.getAttribute('data-number'), 10);
+    var pins = document.querySelectorAll('.map__pin');
+    pins.forEach(deactivatePin);
+    target.classList.add('map__pin--active');
+    renderCard(tickets[pinNumber]);
+    cardPopup.classList.remove('hidden');
+
+    var cardCloser = document.querySelector('.popup__close');
+    cardCloser.addEventListener('click', onCardCloserClick);
+    cardCloser.addEventListener('keydown', onCardCloserKeydown);
+    document.addEventListener('keydown', onCardKeydown);
+  }
 }
+
+function onPinKeydown(evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    onPinClick();
+  }
+}
+
 mapPin.addEventListener('click', onPinClick);
+mapPin.addEventListener('keydown', onPinKeydown);
