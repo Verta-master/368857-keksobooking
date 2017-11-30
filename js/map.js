@@ -152,10 +152,6 @@ function renderCard(newCard) {
 
 renderCard(tickets[0]);
 map.appendChild(card);
-var cardCloser = document.querySelector('.popup__close');
-cardCloser.addEventListener('click', onCardCloserClick);
-cardCloser.addEventListener('keydown', onCardCloserKeydown);
-document.addEventListener('keydown', onCardKeydown);
 
 // Обработка событий вывода карточки
 function isActivePin(pin) {
@@ -208,6 +204,10 @@ function onPinKeydown(evt) {
 mainPin.addEventListener('mouseup', onMainPinMouseUp);
 mapPin.addEventListener('click', onPinClick);
 mapPin.addEventListener('keydown', onPinKeydown);
+var cardCloser = document.querySelector('.popup__close');
+cardCloser.addEventListener('click', onCardCloserClick);
+cardCloser.addEventListener('keydown', onCardCloserKeydown);
+document.addEventListener('keydown', onCardKeydown);
 
 // Начальное состояние
 function setDisabled(item) {
