@@ -44,6 +44,7 @@ var mapPin = document.querySelector('.map__pins');
 var formFields = document.querySelectorAll('fieldset');
 var noticeForm = document.querySelector('.notice__form');
 var mainPin = document.querySelector('.map__pin--main');
+var activatedPin = mainPin;
 var fragment = document.createDocumentFragment();
 var cardTemplate = document.querySelector('template').content.querySelector('.map__card');
 var card = cardTemplate.cloneNode(true);
@@ -184,13 +185,11 @@ function onCardCloserKeydown(evt) {
 }
 
 function onPinClick(evt) {
-  var targetPin = evt.target;
-  var targetButton = targetPin.parentNode;
-  targetButton.classList.contains('map__pin') ? targetPin = targetButton : targetPin = evt.target;
-  if (targetPin.classList.contains('map__pin') && (targetPin.classList.contains('map__pin--main') === false)) {
+  var targetPin = (evt.target.classList.contains('map__pin')) ? evt.target : evt.target.parentNode;
+  if (targetPin.classList.contains('map__pin--main') === false) {
     var pinNumber = parseInt(targetPin.getAttribute('data-number'), 10);
-    var pins = document.querySelectorAll('.map__pin');
-    pins.forEach(deactivatePin);
+    deactivatePin(activatedPin);
+    activatedPin = targetPin;
     targetPin.classList.add('map__pin--active');
     renderCard(tickets[pinNumber]);
     cardPopup.classList.remove('hidden');
