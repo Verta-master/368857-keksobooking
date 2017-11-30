@@ -8,6 +8,7 @@ var OFFER_FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'co
 var TICKETS_NUMBER = 8;
 var ESC_KEYCODE = 27;
 var ENTER_KEYCODE = 13;
+var PIN_TAIL = 18;
 
 var pinWidth = 40;
 var pinHeight = 40;
@@ -44,7 +45,7 @@ var mapPin = document.querySelector('.map__pins');
 var formFields = document.querySelectorAll('fieldset');
 var noticeForm = document.querySelector('.notice__form');
 var mainPin = document.querySelector('.map__pin--main');
-var activatedPin = mainPin;
+var activatedPin = false;
 var fragment = document.createDocumentFragment();
 var cardTemplate = document.querySelector('template').content.querySelector('.map__card');
 var card = cardTemplate.cloneNode(true);
@@ -59,7 +60,7 @@ function getRandomArrayElement(customArray) {
   return customArray[getRandomInt(0, customArray.length)];
 }
 
-// Массив случайной длины из уникальных элементов
+// Массив случайной длины из заданного массива
 function getUniqueArray(customArray) {
   var arrCopy = customArray.slice();
   var startIndex = getRandomInt(0, customArray.length);
@@ -108,20 +109,16 @@ function getTickets(numberOfElements) {
 var tickets = getTickets(TICKETS_NUMBER);
 
 // Отрисовка маркеров
-function getPinShiftX(locationX) {
-  return locationX - pinWidth / 2;
-}
-
 function getPinShiftY(locationY) {
-  return locationY - pinHeight;
+  return locationY - (pinHeight / 2 + PIN_TAIL);
 }
 
-function drawPin(ticket, ticketNumber) {
+function addPinToFragment(ticket, ticketNumber) {
   var newPin = document.querySelector('template').content.querySelector('.map__pin').cloneNode(true);
   newPin.querySelector('img').src = ticket.author.avatar;
   newPin.querySelector('img').width = pinWidth;
   newPin.querySelector('img').height = pinHeight;
-  newPin.style.left = getPinShiftX(ticket.location.x) + 'px';
+  newPin.style.left = ticket.location.x + 'px';
   newPin.style.top = getPinShiftY(ticket.location.y) + 'px';
   newPin.setAttribute('data-number', String(ticketNumber));
   fragment.appendChild(newPin);
@@ -131,7 +128,7 @@ function onMainPinMouseUp() {
   map.classList.remove('map--faded');
   noticeForm.classList.remove('notice__form--disabled');
   formFields.forEach(removeDisabled);
-  tickets.forEach(drawPin);
+  tickets.forEach(addPinToFragment);
   mapPin.appendChild(fragment);
 }
 
@@ -151,17 +148,20 @@ function renderCard(newCard) {
   card.querySelector('.popup__features').insertAdjacentHTML('beforeend', newCard.offer.features.map(getFeaturesList).join(' '));
   card.querySelector('p:last-of-type').textContent = newCard.offer.description;
   card.querySelector('.popup__avatar').src = newCard.author.avatar;
-  return card;
 }
 
-fragment.appendChild(renderCard(tickets[0]));
-map.appendChild(fragment);
+renderCard(tickets[0]);
+map.appendChild(card);
 
 // Обработка событий вывода карточки
-function deactivatePin(pin) {
-  if (pin.classList.contains('map__pin--active')) {
-    pin.classList.remove('map__pin--active');
+function isActivePin(pin) {
+  if (activatedPin === false) {
+    pin.classList.add('map__pin--active');
+  } else {
+    activatedPin.classList.remove('map__pin--active');
+    pin.classList.add('map__pin--active');
   }
+  activatedPin = pin;
 }
 
 function onCardCloserClick() {
@@ -186,10 +186,9 @@ function onCardCloserKeydown(evt) {
 
 function onPinClick(evt) {
   var targetPin = (evt.target.classList.contains('map__pin')) ? evt.target : evt.target.parentNode;
-  if (targetPin.classList.contains('map__pin--main') === false) {
+  if (targetPin.classList.contains('map__pin--main') === false && evt.target.classList.contains('map__pinsoverlay') === false && evt.target.parentNode.tagName !== 'svg' && evt.target.parentNode.parentNode.tagName !== 'svg') {
     var pinNumber = parseInt(targetPin.getAttribute('data-number'), 10);
-    deactivatePin(activatedPin);
-    activatedPin = targetPin;
+    isActivePin(targetPin);
     targetPin.classList.add('map__pin--active');
     renderCard(tickets[pinNumber]);
     cardPopup.classList.remove('hidden');
