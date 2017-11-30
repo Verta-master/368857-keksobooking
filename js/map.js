@@ -152,6 +152,10 @@ function renderCard(newCard) {
 
 renderCard(tickets[0]);
 map.appendChild(card);
+var cardCloser = document.querySelector('.popup__close');
+cardCloser.addEventListener('click', onCardCloserClick);
+cardCloser.addEventListener('keydown', onCardCloserKeydown);
+document.addEventListener('keydown', onCardKeydown);
 
 // Обработка событий вывода карточки
 function isActivePin(pin) {
@@ -165,7 +169,7 @@ function isActivePin(pin) {
 }
 
 function onCardCloserClick() {
-  cardPopup.classList.add('hidden');
+  card.classList.add('hidden');
   var activePin = document.querySelector('.map__pin--active');
   if (activePin.classList.contains('map__pin--active')) {
     activePin.classList.remove('map__pin--active');
@@ -191,11 +195,7 @@ function onPinClick(evt) {
     isActivePin(targetPin);
     targetPin.classList.add('map__pin--active');
     renderCard(tickets[pinNumber]);
-    cardPopup.classList.remove('hidden');
-    var cardCloser = document.querySelector('.popup__close');
-    cardCloser.addEventListener('click', onCardCloserClick);
-    cardCloser.addEventListener('keydown', onCardCloserKeydown);
-    document.addEventListener('keydown', onCardKeydown);
+    card.classList.remove('hidden');
   }
 }
 
@@ -218,8 +218,7 @@ function removeDisabled(item) {
   item.removeAttribute('disabled', 'disabled');
 }
 
-var cardPopup = document.querySelector('.popup');
-cardPopup.classList.add('hidden');
+card.classList.add('hidden');
 formFields.forEach(setDisabled);
 
 if (map.classList.contains('map--faded') === false) {
