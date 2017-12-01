@@ -46,6 +46,7 @@ var formFields = document.querySelectorAll('fieldset');
 var noticeForm = document.querySelector('.notice__form');
 var mainPin = document.querySelector('.map__pin--main');
 var activatedPin = false;
+var startMap = false;
 var fragment = document.createDocumentFragment();
 var cardTemplate = document.querySelector('template').content.querySelector('.map__card');
 var card = cardTemplate.cloneNode(true);
@@ -125,11 +126,14 @@ function addPinToFragment(ticket, ticketNumber) {
 }
 
 function onMainPinMouseUp() {
-  map.classList.remove('map--faded');
-  noticeForm.classList.remove('notice__form--disabled');
-  formFields.forEach(removeDisabled);
-  tickets.forEach(addPinToFragment);
-  mapPin.appendChild(fragment);
+  if (startMap === false) {
+    map.classList.remove('map--faded');
+    noticeForm.classList.remove('notice__form--disabled');
+    formFields.forEach(removeDisabled);
+    tickets.forEach(addPinToFragment);
+    mapPin.appendChild(fragment);
+    startMap = true;
+  }
 }
 
 // Отрисовка карточки
@@ -166,9 +170,8 @@ function isActivePin(pin) {
 
 function onCardCloserClick() {
   card.classList.add('hidden');
-  var activePin = document.querySelector('.map__pin--active');
-  if (activePin.classList.contains('map__pin--active')) {
-    activePin.classList.remove('map__pin--active');
+  if (activatedPin) {
+    activatedPin.classList.remove('map__pin--active');
   }
 }
 
@@ -186,7 +189,7 @@ function onCardCloserKeydown(evt) {
 
 function onPinClick(evt) {
   var targetPin = (evt.target.classList.contains('map__pin')) ? evt.target : evt.target.parentNode;
-  if (targetPin.classList.contains('map__pin--main') === false && evt.target.classList.contains('map__pinsoverlay') === false && evt.target.parentNode.tagName !== 'svg' && evt.target.parentNode.parentNode.tagName !== 'svg') {
+  if (targetPin.classList.contains('map__pin--main') === false && targetPin.classList.contains('map__pin') === true) {
     var pinNumber = parseInt(targetPin.getAttribute('data-number'), 10);
     isActivePin(targetPin);
     targetPin.classList.add('map__pin--active');
