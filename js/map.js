@@ -7,7 +7,6 @@ var OFFER_CHECKOUTS = ['12:00', '13:00', '14:00'];
 var OFFER_FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var TICKETS_NUMBER = 8;
 var ESC_KEYCODE = 27;
-var ENTER_KEYCODE = 13;
 var PIN_TAIL = 18;
 
 var pinWidth = 40;
@@ -50,6 +49,7 @@ var startMap = false;
 var fragment = document.createDocumentFragment();
 var cardTemplate = document.querySelector('template').content.querySelector('.map__card');
 var card = cardTemplate.cloneNode(true);
+var cardCloser = card.querySelector('.popup__close');
 
 // Случайное целое из диапазона (min, max), не включая max
 function getRandomInt(min, max) {
@@ -181,12 +181,6 @@ function onCardKeydown(evt) {
   }
 }
 
-function onCardCloserKeydown(evt) {
-  if (evt.keyCode === ENTER_KEYCODE) {
-    onCardCloserClick();
-  }
-}
-
 function onPinClick(evt) {
   var targetPin = (evt.target.classList.contains('map__pin')) ? evt.target : evt.target.parentNode;
   if (targetPin.classList.contains('map__pin--main') === false && targetPin.classList.contains('map__pin') === true) {
@@ -198,18 +192,9 @@ function onPinClick(evt) {
   }
 }
 
-function onPinKeydown(evt) {
-  if (evt.keyCode === ENTER_KEYCODE) {
-    onPinClick();
-  }
-}
-
 mainPin.addEventListener('mouseup', onMainPinMouseUp);
 mapPin.addEventListener('click', onPinClick);
-mapPin.addEventListener('keydown', onPinKeydown);
-var cardCloser = document.querySelector('.popup__close');
 cardCloser.addEventListener('click', onCardCloserClick);
-cardCloser.addEventListener('keydown', onCardCloserKeydown);
 document.addEventListener('keydown', onCardKeydown);
 
 // Начальное состояние
