@@ -37,7 +37,8 @@ var guests = {
 var offerType = {
   flat: 'Квартира',
   house: 'Дом',
-  bungalo: 'Бунгало'
+  bungalo: 'Бунгало',
+  palace: 'Дворец'
 };
 var map = document.querySelector('.map');
 var mapPin = document.querySelector('.map__pins');
@@ -50,6 +51,14 @@ var fragment = document.createDocumentFragment();
 var cardTemplate = document.querySelector('template').content.querySelector('.map__card');
 var card = cardTemplate.cloneNode(true);
 var cardCloser = card.querySelector('.popup__close');
+var addressField = noticeForm.querySelector('#address');
+var titleField = noticeForm.querySelector('#title');
+var priceField = noticeForm.querySelector('#price');
+var timeInField = noticeForm.querySelector('#timein');
+var timeOutField = noticeForm.querySelector('#timeout');
+var houseType = noticeForm.querySelector('#type');
+var roomNumber = noticeForm.querySelector('#room_number');
+var capacity = noticeForm.querySelector('#capacity');
 
 // Случайное целое из диапазона (min, max), не включая max
 function getRandomInt(min, max) {
@@ -216,3 +225,110 @@ if (map.classList.contains('map--faded') === false) {
 if (noticeForm.classList.contains('notice__form--disabled') === false) {
   noticeForm.classList.add('notice__form--disabled');
 }
+
+// работа с формой
+function setFieldBorder(field, color) {
+  field.style.borderColor = color;
+}
+
+function onTitleFieldInvalid(evt) {
+  setFieldBorder(evt.target, 'red');
+  if (evt.target.validity.tooShort || (evt.target.value.length < evt.target.getAttribute('minlength'))) {
+    evt.target.setCustomValidity('Минимум ' + evt.target.getAttribute('minlength') + ' символов');
+  } else if (evt.target.validity.tooLong) {
+    evt.target.setCustomValidity('Не более ' + evt.target.getAttribute('maxlength') + ' символов');
+  } else if (evt.target.validity.valueMissing) {
+    evt.target.setCustomValidity('Обязательное поле');
+  } else {
+    evt.target.setCustomValidity('');
+    setFieldBorder(evt.target, 'transparent');
+  }
+}
+
+function onPriceFieldInvalid(evt) {
+  setFieldBorder(evt.target, 'red');
+  if (evt.target.value < parseInt(evt.target.getAttribute('minlength'), 10)) {
+    evt.target.setCustomValidity('Минимальное значение: ' + evt.target.getAttribute('minlength'));
+  } else if (evt.target.value > parseInt(evt.target.getAttribute('maxlength'), 10)) {
+    evt.target.setCustomValidity('Максимальное значение: ' + evt.target.getAttribute('maxlength'));
+  } else if (evt.target.validity.valueMissing) {
+    evt.target.setCustomValidity('Обязательное поле');
+  } else {
+    evt.target.setCustomValidity('');
+    setFieldBorder(evt.target, 'transparent');
+  }
+}
+
+function findSelectedOptionText(customArray) {
+  for (var i = 0; i < customArray.options.length; i++) {
+    if (customArray.options[i].selected) {
+      return customArray.options[i].text;
+    }
+  }
+  return '';
+}
+
+function synchroniseSelectByValue(mainArray, dependentArray) {
+  for (var i = 0; i < mainArray.options.length; i++) {
+    if (mainArray.options[i].selected) {
+      dependentArray.options[i].selected = mainArray.options[i].value;
+      break;
+    }
+  }
+}
+
+function synchroniseSelectByIndex(mainArray, dependentArray) {
+  for (var i = 0; i < mainArray.options.length; i++) {
+    if (mainArray.options[i].selected) {
+      var index = (i === dependentArray.length - 1) ? i : dependentArray.length - i - 2;
+      dependentArray.options[index].selected = mainArray.options[i].value;
+      break;
+    }
+  }
+}
+
+function onTimeInFieldChange() {
+  synchroniseSelectByValue(timeInField, timeOutField);
+}
+
+function onHouseTypeChange() {
+  switch (findSelectedOptionText(houseType)) {
+    case offerType.flat:
+      priceField.setAttribute('minlength', '1000');
+      break;
+    case 'Лачуга':
+      priceField.setAttribute('minlength', '0');
+      break;
+    case offerType.house:
+      priceField.setAttribute('minlength', '5000');
+      break;
+    case offerType.palace:
+      priceField.setAttribute('minlength', '10000');
+  }
+}
+
+function onRoomNumberChange() {
+  synchroniseSelectByIndex(roomNumber, capacity);
+}
+
+noticeForm.setAttribute('action', 'https://js.dump.academy/keksobooking');
+addressField.setAttribute('readonly', 'true');
+addressField.setAttribute('required', 'true');
+addressField.setAttribute('value', 'Здесь будет адрес');
+titleField.setAttribute('minlength', '30');
+titleField.setAttribute('maxlength', '100');
+titleField.setAttribute('required', 'true');
+priceField.setAttribute('required', 'true');
+priceField.setAttribute('minlength', '0');
+priceField.setAttribute('maxlength', '1000000');
+priceField.setAttribute('value', '1000');
+if (priceField.getAttribute('type') !== 'number') {
+  priceField.setAttribute('type', 'number');
+}
+
+titleField.addEventListener('invalid', onTitleFieldInvalid);
+priceField.addEventListener('invalid', onPriceFieldInvalid);
+
+timeInField.addEventListener('change', onTimeInFieldChange);
+houseType.addEventListener('change', onHouseTypeChange);
+roomNumber.addEventListener('change', onRoomNumberChange);
