@@ -243,7 +243,7 @@ function setFieldBorder(field, color) {
 
 function onTitleFieldInvalid(evt) {
   setFieldBorder(evt.target, 'red');
-  if (evt.target.validity.tooShort || (evt.target.value.length < evt.target.getAttribute('minlength'))) {
+  if (evt.target.validity.tooShort) {
     evt.target.setCustomValidity('Минимум ' + evt.target.getAttribute('minlength') + ' символов');
   } else if (evt.target.validity.tooLong) {
     evt.target.setCustomValidity('Не более ' + evt.target.getAttribute('maxlength') + ' символов');
@@ -278,23 +278,11 @@ function onTimeOutFieldChange(evt) {
 }
 
 function onHouseTypeChange(evt) {
-  switch (evt.target.value) {
-    case 'flat':
-      priceField.setAttribute('min', minPrices.flat);
-      break;
-    case 'bungalo':
-      priceField.setAttribute('min', minPrices.bungalo);
-      break;
-    case 'house':
-      priceField.setAttribute('min', minPrices.house);
-      break;
-    case 'palace':
-      priceField.setAttribute('min', minPrices.palace);
-  }
+  priceField.setAttribute('min', minPrices[evt.target.value]);
 }
 
 function onRoomNumberChange() {
-  capacity.value = (roomNumber.value !== 100) ? roomNumber.value : 0;
+  capacity.value = (roomNumber.value !== '100') ? roomNumber.value : 0;
   var index = capacity.length - capacity.value - 1;
   for (var i = 0; i < capacity.length; i++) {
     if (i === index) {
