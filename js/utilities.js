@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  window.data = {
+  window.utilities = {
     // Случайное целое из диапазона (min, max), не включая max
     getRandomInt: function(min, max) {
       return Math.floor(Math.random() * (max - min)) + min;

@@ -7,10 +7,9 @@ var OFFER_CHECKOUTS = ['12:00', '13:00', '14:00'];
 var OFFER_FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var TICKETS_NUMBER = 8;
 var ESC_KEYCODE = 27;
-var PIN_TAIL = 18;
+
 
 var pinWidth = 40;
-var pinHeight = 40;
 var arrTitles = OFFER_TITLES.slice();
 var coords = {
   x: {
@@ -96,7 +95,7 @@ function createTicket(number) {
       y: locationY
     }
   };
-  ticket.offer.features = getUniqueArray(OFFER_FEATURES).slice();
+  ticket.offer.features = window.utilities.getUniqueArray(OFFER_FEATURES).slice();
   return ticket;
 }
 
@@ -111,17 +110,15 @@ function getTickets(numberOfElements) {
 var tickets = getTickets(TICKETS_NUMBER);
 
 // Отрисовка маркеров
-function getPinShiftY(locationY) {
-  return locationY - (pinHeight / 2 + PIN_TAIL);
-}
+
 
 function addPinToFragment(ticket, ticketNumber) {
   var newPin = document.querySelector('template').content.querySelector('.map__pin').cloneNode(true);
   newPin.querySelector('img').src = ticket.author.avatar;
   newPin.querySelector('img').width = pinWidth;
-  newPin.querySelector('img').height = pinHeight;
+  newPin.querySelector('img').height = window.shift.pinHeight;
   newPin.style.left = ticket.location.x + 'px';
-  newPin.style.top = getPinShiftY(ticket.location.y) + 'px';
+  newPin.style.top = window.shift.getPinShiftY(ticket.location.y) + 'px';
   newPin.setAttribute('data-number', String(ticketNumber));
   fragment.appendChild(newPin);
 }
