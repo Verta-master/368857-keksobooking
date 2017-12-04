@@ -2,12 +2,7 @@
 
 var ESC_KEYCODE = 27;
 var pinWidth = 40;
-var offerTypes = {
-  flat: 'Квартира',
-  house: 'Дом',
-  bungalo: 'Бунгало',
-  palace: 'Дворец'
-};
+
 var minPrices = {
   bungalo: 0,
   flat: 1000,
@@ -25,10 +20,7 @@ var noticeForm = document.querySelector('.notice__form');
 var mainPin = document.querySelector('.map__pin--main');
 var activatedPin = false;
 var startMap = false;
-var fragment = document.createDocumentFragment();
-var cardTemplate = document.querySelector('template').content.querySelector('.map__card');
-var card = cardTemplate.cloneNode(true);
-var cardCloser = card.querySelector('.popup__close');
+var cardCloser = window.card.newCard.querySelector('.popup__close');
 var addressField = noticeForm.querySelector('#address');
 var titleField = noticeForm.querySelector('#title');
 var priceField = noticeForm.querySelector('#price');
@@ -62,26 +54,7 @@ function onMainPinMouseUp() {
   }
 }
 
-// Отрисовка карточки
-function getFeaturesList(element) {
-  return '<li class="feature feature--' + element + '"></li>';
-}
-
-function renderCard(newCard) {
-  card.querySelector('h3').textContent = newCard.offer.title;
-  card.querySelector('small').textContent = newCard.offer.address;
-  card.querySelector('.popup__price').innerHTML = newCard.offer.price + '&#x20bd;/ночь';
-  card.querySelector('h4').textContent = offerTypes[newCard.offer.type];
-  card.querySelector('p:nth-of-type(3)').textContent = newCard.offer.room + ' комнаты для ' + newCard.offer.guests + ' гостей';
-  card.querySelector('p:nth-of-type(4)').textContent = 'Заезд после ' + newCard.offer.checkin + ' выезд до ' + newCard.offer.checkout;
-  card.querySelector('.popup__features').innerHTML = '';
-  card.querySelector('.popup__features').insertAdjacentHTML('beforeend', newCard.offer.features.map(getFeaturesList).join(' '));
-  card.querySelector('p:last-of-type').textContent = newCard.offer.description;
-  card.querySelector('.popup__avatar').src = newCard.author.avatar;
-}
-
-renderCard(window.data.tickets[0]);
-map.appendChild(card);
+map.appendChild(window.card.newCard());
 
 // Обработка событий вывода карточки
 function isActivePin(pin) {
@@ -209,8 +182,8 @@ titleField.setAttribute('maxlength', titleLengths.max);
 titleField.setAttribute('required', 'true');
 priceField.setAttribute('required', 'true');
 priceField.setAttribute('min', '0');
-priceField.setAttribute('max', prices.max);
-priceField.setAttribute('value', prices.min);
+priceField.setAttribute('max', window.data.getMaxPrice());
+priceField.setAttribute('value', window.data.getMinPrice());
 capacity.value = roomNumber.value;
 for (var i = 0; i < capacity.length; i++) {
   capacity.options[i].setAttribute('disabled', 'disabled');

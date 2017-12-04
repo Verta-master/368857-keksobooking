@@ -70,6 +70,12 @@
   }
 
   window.data = {
+    getMinPrice: function() {
+      return prices.min;
+    },
+    getMaxPrice: function() {
+      return prices.max;
+    },
     tickets: getTickets(TICKETS_NUMBER),
   };
 })();
