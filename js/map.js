@@ -70,41 +70,23 @@ var houseType = noticeForm.querySelector('#type');
 var roomNumber = noticeForm.querySelector('#room_number');
 var capacity = noticeForm.querySelector('#capacity');
 
-//// Случайное целое из диапазона (min, max), не включая max
-//function getRandomInt(min, max) {
-//  return Math.floor(Math.random() * (max - min)) + min;
-//}
-//
-//// Случайный элемент из массива
-//function getRandomArrayElement(customArray) {
-//  return customArray[getRandomInt(0, customArray.length)];
-//}
-//
-//// Массив случайной длины из заданного массива
-//function getUniqueArray(customArray) {
-//  var arrCopy = customArray.slice();
-//  var startIndex = getRandomInt(0, customArray.length);
-//  var numberElement = getRandomInt(0, customArray.length - startIndex);
-//  return arrCopy.splice(startIndex, numberElement);
-//}
-
 // Заполнение массива данных
 function createTicket(number) {
-  var locationX = getRandomInt(coords.x.min, coords.x.max);
-  var locationY = getRandomInt(coords.y.min, coords.y.max);
+  var locationX = window.utilities.getRandomInt(coords.x.min, coords.x.max);
+  var locationY = window.utilities.getRandomInt(coords.y.min, coords.y.max);
   var ticket = {
     author: {
       avatar: 'img/avatars/user0' + String(number) + '.png'
     },
     offer: {
-      title: arrTitles.splice(getRandomInt(0, arrTitles.length), 1),
+      title: arrTitles.splice(window.utilities.getRandomInt(0, arrTitles.length), 1),
       address: '(' + String(locationX) + ', ' + String(locationY) + ')',
-      price: getRandomInt(prices.min, prices.max),
-      type: getRandomArrayElement(OFFER_TYPES),
-      room: getRandomInt(rooms.min, rooms.max + 1),
-      guests: getRandomInt(guests.min, guests.max + 1),
-      checkin: getRandomArrayElement(OFFER_CHECKINS),
-      checkout: getRandomArrayElement(OFFER_CHECKOUTS),
+      price: window.utilities.getRandomInt(prices.min, prices.max),
+      type: window.utilities.getRandomArrayElement(OFFER_TYPES),
+      room: window.utilities.getRandomInt(rooms.min, rooms.max + 1),
+      guests: window.utilities.getRandomInt(guests.min, guests.max + 1),
+      checkin: window.utilities.getRandomArrayElement(OFFER_CHECKINS),
+      checkout: window.utilities.getRandomArrayElement(OFFER_CHECKOUTS),
       features: [],
       description: '',
       photos: []

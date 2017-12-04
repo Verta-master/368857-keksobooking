@@ -9,14 +9,14 @@
 
     // Случайный элемент из массива
     getRandomArrayElement: function(customArray) {
-      return customArray[getRandomInt(0, customArray.length)];
+      return customArray[this.getRandomInt(0, customArray.length)];
     },
 
     // Массив случайной длины из заданного массива
     getUniqueArray: function(customArray) {
       var arrCopy = customArray.slice();
-      var startIndex = getRandomInt(0, customArray.length);
-      var numberElement = getRandomInt(0, customArray.length - startIndex);
+      var startIndex = this.getRandomInt(0, customArray.length);
+      var numberElement = this.getRandomInt(0, customArray.length - startIndex);
       return arrCopy.splice(startIndex, numberElement);
     },
   };
