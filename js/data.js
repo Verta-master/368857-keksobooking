@@ -1,9 +1,13 @@
 'use strict';
 
 (function () {
-  var pinWidth = 40;
-  var pinHeight = 40;
-  var arrTitles = window.data.OFFER_TITLES.slice();
+  var OFFER_TITLES = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
+  var OFFER_TYPES = ['flat', 'house', 'bungalo'];
+  var OFFER_CHECKINS = ['12:00', '13:00', '14:00'];
+  var OFFER_CHECKOUTS = ['12:00', '13:00', '14:00'];
+  var OFFER_FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+  var TICKETS_NUMBER = 8;
+  var arrTitles = OFFER_TITLES.slice();
   var coords = {
     x: {
       min: 300,
@@ -13,6 +17,18 @@
       min: 100,
       max: 500
     }
+  };
+  var prices = {
+    min: 1E3,
+    max: 1E6
+  };
+  var rooms = {
+    min: 1,
+    max: 5
+  };
+  var guests = {
+    min: 0,
+    max: 10
   };
 
   // Заполнение массива данных
@@ -54,32 +70,6 @@
   }
 
   window.data = {
-    OFFER_TITLES: ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'],
-    OFFER_TYPES: ['flat', 'house', 'bungalo'],
-    OFFER_CHECKINS: ['12:00', '13:00', '14:00'],
-    OFFER_CHECKOUTS: ['12:00', '13:00', '14:00'],
-    OFFER_FEATURES: ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'],
-    TICKETS_NUMBER: 8,
-    ESC_KEYCODE: 27,
-    PIN_TAIL: 18,
-    prices: {
-      min: 1E3,
-      max: 1E6
-    },
-    rooms: {
-      min: 1,
-      max: 5
-    },
-    guests: {
-      min: 0,
-      max: 10
-    },
-    offerTypes: {
-      flat: 'Квартира',
-      house: 'Дом',
-      bungalo: 'Бунгало',
-      palace: 'Дворец'
-    },
     tickets: getTickets(TICKETS_NUMBER),
   };
 })();
