@@ -13,6 +13,7 @@ var titleLengths = {
   min: 30,
   max: 100
 };
+var fragment = document.createDocumentFragment();
 var map = document.querySelector('.map');
 var mapPin = document.querySelector('.map__pins');
 var formFields = document.querySelectorAll('fieldset');
@@ -20,7 +21,9 @@ var noticeForm = document.querySelector('.notice__form');
 var mainPin = document.querySelector('.map__pin--main');
 var activatedPin = false;
 var startMap = false;
-var cardCloser = window.card.newCard.querySelector('.popup__close');
+var cardTemplate = document.querySelector('template').content.querySelector('.map__card');
+var card = cardTemplate.cloneNode(true);
+var cardCloser = card.querySelector('.popup__close');
 var addressField = noticeForm.querySelector('#address');
 var titleField = noticeForm.querySelector('#title');
 var priceField = noticeForm.querySelector('#price');
@@ -54,7 +57,8 @@ function onMainPinMouseUp() {
   }
 }
 
-map.appendChild(window.card.newCard());
+window.card.renderCard(window.data.tickets[0]);
+map.appendChild(card);
 
 // Обработка событий вывода карточки
 function isActivePin(pin) {
