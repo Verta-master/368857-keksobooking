@@ -1,6 +1,6 @@
 'use strict';
 
-// Отрисовка карточки
+// Заполнение карточки
 window.card = (function () {
   var offerTypes = {
     flat: 'Квартира',
