@@ -6,9 +6,9 @@
   var mainPin = document.querySelector('.map__pin--main');
   var activatedPin = false;
 
-  window.card.renderCard(window.data.tickets[0]);
-  window.pin.map.appendChild(window.card.card);
-  var cardCloser = window.card.card.querySelector('.popup__close');
+  window.card.render(window.data.tickets[0]);
+  window.pin.map.appendChild(window.card.label);
+
 
   // Обработка событий вывода карточки
   function isActivePin(pin) {
@@ -22,7 +22,7 @@
   }
 
   function onCardCloserClick() {
-    window.card.card.classList.add('hidden');
+    window.card.label.classList.add('hidden');
     if (activatedPin) {
       activatedPin.classList.remove('map__pin--active');
     }
@@ -40,14 +40,14 @@
       var pinNumber = parseInt(targetPin.getAttribute('data-number'), 10);
       isActivePin(targetPin);
       targetPin.classList.add('map__pin--active');
-      window.card.renderCard(window.data.tickets[pinNumber]);
-      window.card.card.classList.remove('hidden');
+      window.card.render(window.data.tickets[pinNumber]);
+      window.card.label.classList.remove('hidden');
     }
   }
 
   mainPin.addEventListener('mouseup', window.pin.onMainPinMouseUp);
-  window.pin.mapPin.addEventListener('click', onPinClick);
-  cardCloser.addEventListener('click', onCardCloserClick);
+  window.pin.mapMarker.addEventListener('click', onPinClick);
+  window.card.close.addEventListener('click', onCardCloserClick);
   document.addEventListener('keydown', onCardKeydown);
 
   // Начальное состояние
@@ -55,7 +55,7 @@
     item.setAttribute('disabled', 'disabled');
   }
 
-  window.card.card.classList.add('hidden');
+  window.card.label.classList.add('hidden');
   window.pin.formFields.forEach(setDisabled);
 
   if (window.pin.map.classList.contains('map--faded') === false) {

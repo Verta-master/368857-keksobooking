@@ -37,7 +37,7 @@ window.pin = (function () {
       }
     },
     map: map,
-    mapPin: mapPin,
+    mapMarker: mapPin,
     formFields: formFields,
     noticeForm: noticeForm,
   };
