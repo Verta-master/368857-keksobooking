@@ -21,9 +21,6 @@ var noticeForm = document.querySelector('.notice__form');
 var mainPin = document.querySelector('.map__pin--main');
 var activatedPin = false;
 var startMap = false;
-var cardTemplate = document.querySelector('template').content.querySelector('.map__card');
-var card = cardTemplate.cloneNode(true);
-var cardCloser = card.querySelector('.popup__close');
 var addressField = noticeForm.querySelector('#address');
 var titleField = noticeForm.querySelector('#title');
 var priceField = noticeForm.querySelector('#price');
@@ -58,7 +55,8 @@ function onMainPinMouseUp() {
 }
 
 window.card.renderCard(window.data.tickets[0]);
-map.appendChild(card);
+map.appendChild(window.card.card);
+var cardCloser = window.card.card.querySelector('.popup__close');
 
 // Обработка событий вывода карточки
 function isActivePin(pin) {
@@ -72,7 +70,7 @@ function isActivePin(pin) {
 }
 
 function onCardCloserClick() {
-  card.classList.add('hidden');
+  window.card.card.classList.add('hidden');
   if (activatedPin) {
     activatedPin.classList.remove('map__pin--active');
   }
@@ -91,7 +89,7 @@ function onPinClick(evt) {
     isActivePin(targetPin);
     targetPin.classList.add('map__pin--active');
     renderCard(window.data.tickets[pinNumber]);
-    card.classList.remove('hidden');
+    window.card.card.classList.remove('hidden');
   }
 }
 
@@ -109,7 +107,7 @@ function removeDisabled(item) {
   item.removeAttribute('disabled', 'disabled');
 }
 
-card.classList.add('hidden');
+window.card.card.classList.add('hidden');
 formFields.forEach(setDisabled);
 
 if (map.classList.contains('map--faded') === false) {

@@ -70,10 +70,10 @@
   }
 
   window.data = {
-    getMinPrice: function() {
+    getMinPrice: function () {
       return prices.min;
     },
-    getMaxPrice: function() {
+    getMaxPrice: function () {
       return prices.max;
     },
     tickets: getTickets(TICKETS_NUMBER),

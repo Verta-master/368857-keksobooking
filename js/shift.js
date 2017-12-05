@@ -5,7 +5,7 @@
 
   window.shift = {
     pinHeight: 40,
-    getPinShiftY: function(locationY) {
+    getPinShiftY: function (locationY) {
       return locationY - (this.pinHeight / 2 + PIN_TAIL);
     },
   };
