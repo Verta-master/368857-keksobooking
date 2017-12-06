@@ -7,5 +7,8 @@
     getPinShiftY: function (locationY, pinSize) {
       return locationY - Math.floor(pinSize / 2 + PIN_TAIL);
     },
+    getMainPinY: function (locationY, pinSize) {
+      return locationY + Math.floor(pinSize / 2 + PIN_TAIL);
+    }
   };
 })();

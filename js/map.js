@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  // var mainPinHeight = 65;
+  var mainPinHeight = 65;
   var mainPin = document.querySelector('.map__pin--main');
 
   function onPinClick(evt) {
@@ -40,7 +40,7 @@
     };
 
     function setAddress(x, y) {
-      var address = 'x: ' + x + ', y: ' + y;
+      var address = 'x: ' + x + ', y: ' + window.shift.getMainPinY(y, mainPinHeight);
       window.form.address.setAttribute('value', address);
     }
 
@@ -59,7 +59,6 @@
 
       finalCoords.x = mainPin.offsetLeft - shift.x;
       var newY = mainPin.offsetTop - shift.y;
-      // var newY = window.shift.getPinShiftY(mainPin.offsetTop - shift.y, mainPinHeight);
       if (newY < parseInt(window.data.limitY.min, 10)) {
         finalCoords.y = parseInt(window.data.limitY.min, 10);
       } else if (newY > parseInt(window.data.limitY.max, 10)) {
