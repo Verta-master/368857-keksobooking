@@ -4,6 +4,7 @@
 window.pin = (function () {
   var pinWidth = 40;
   var startMap = false;
+  var activatedPin = false;
   var map = document.querySelector('.map');
   var mapPin = document.querySelector('.map__pins');
   var formFields = document.querySelectorAll('fieldset');
@@ -36,9 +37,19 @@ window.pin = (function () {
         startMap = true;
       }
     },
+    isActive: function (pin) {
+      if (activatedPin === false) {
+        pin.classList.add('map__pin--active');
+      } else {
+        activatedPin.classList.remove('map__pin--active');
+        pin.classList.add('map__pin--active');
+      }
+      activatedPin = pin;
+    },
     map: map,
     mapMarker: mapPin,
     formFields: formFields,
     noticeForm: noticeForm,
+    activatedPin: activatedPin,
   };
 })();

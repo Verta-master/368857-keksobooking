@@ -4,27 +4,17 @@
   var ESC_KEYCODE = 27;
 
   var mainPin = document.querySelector('.map__pin--main');
-  var activatedPin = false;
 
   window.card.render(window.data.tickets[0]);
   window.pin.map.appendChild(window.card.label);
 
 
   // Обработка событий вывода карточки
-  function isActivePin(pin) {
-    if (activatedPin === false) {
-      pin.classList.add('map__pin--active');
-    } else {
-      activatedPin.classList.remove('map__pin--active');
-      pin.classList.add('map__pin--active');
-    }
-    activatedPin = pin;
-  }
 
   function onCardCloserClick() {
     window.card.label.classList.add('hidden');
-    if (activatedPin) {
-      activatedPin.classList.remove('map__pin--active');
+    if (window.pin.activatedPin !== false) {
+      window.pin.activatedPin.classList.remove('map__pin--active');
     }
   }
 
@@ -38,7 +28,7 @@
     var targetPin = (evt.target.classList.contains('map__pin')) ? evt.target : evt.target.parentNode;
     if (targetPin.classList.contains('map__pin--main') === false && targetPin.classList.contains('map__pin') === true) {
       var pinNumber = parseInt(targetPin.getAttribute('data-number'), 10);
-      isActivePin(targetPin);
+      window.pin.isActive(targetPin);
       targetPin.classList.add('map__pin--active');
       window.card.render(window.data.tickets[pinNumber]);
       window.card.label.classList.remove('hidden');
