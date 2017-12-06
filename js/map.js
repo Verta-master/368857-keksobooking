@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  // var mainPinHeight = 65;
   var mainPin = document.querySelector('.map__pin--main');
 
   function onPinClick(evt) {
@@ -25,4 +26,61 @@
   window.card.hide();
   window.form.setFormDisabled();
   window.form.setFieldsDisabled();
+
+  // Перемещение главного пина
+  mainPin.addEventListener('mousedown', function (evt) {
+    evt.preventDefault();
+    var startCoords = {
+      x: evt.clientX,
+      y: evt.clientY
+    };
+    var finalCoords = {
+      x: evt.clientX,
+      y: evt.clientY
+    };
+
+    function setAddress(x, y) {
+      var address = 'x: ' + x + ', y: ' + y;
+      window.form.address.setAttribute('value', address);
+    }
+
+    function onMouseMove(moveEvt) {
+      moveEvt.preventDefault();
+
+      var shift = {
+        x: startCoords.x - moveEvt.clientX,
+        y: startCoords.y - moveEvt.clientY
+      };
+
+      startCoords = {
+        x: moveEvt.clientX,
+        y: moveEvt.clientY
+      };
+
+      finalCoords.x = mainPin.offsetLeft - shift.x;
+      var newY = mainPin.offsetTop - shift.y;
+      // var newY = window.shift.getPinShiftY(mainPin.offsetTop - shift.y, mainPinHeight);
+      if (newY < parseInt(window.data.limitY.min, 10)) {
+        finalCoords.y = parseInt(window.data.limitY.min, 10);
+      } else if (newY > parseInt(window.data.limitY.max, 10)) {
+        finalCoords.y = parseInt(window.data.limitY.max, 10);
+      } else {
+        finalCoords.y = newY;
+      }
+
+      mainPin.style.top = finalCoords.y + 'px';
+      mainPin.style.left = finalCoords.x + 'px';
+      setAddress(finalCoords.x, finalCoords.y);
+    }
+
+    function onMouseUp(upEvt) {
+      upEvt.preventDefault();
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+      setAddress(finalCoords.x, finalCoords.y);
+    }
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+  });
 })();
