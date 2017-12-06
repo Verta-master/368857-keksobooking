@@ -6,8 +6,6 @@ window.pin = (function () {
   var startMap = false;
   var map = document.querySelector('.map');
   var mapPin = document.querySelector('.map__pins');
-  var formFields = document.querySelectorAll('fieldset');
-  var noticeForm = document.querySelector('.notice__form');
   var fragment = document.createDocumentFragment();
 
   function addPinToFragment(ticket, ticketNumber) {
@@ -21,16 +19,12 @@ window.pin = (function () {
     fragment.appendChild(newPin);
   }
 
-  function removeDisabled(item) {
-    item.removeAttribute('disabled', 'disabled');
-  }
-
   return {
     onMainPinMouseUp: function () {
       if (startMap === false) {
         map.classList.remove('map--faded');
-        noticeForm.classList.remove('notice__form--disabled');
-        formFields.forEach(removeDisabled);
+        window.form.setFormActive();
+        window.form.setFieldsActive();
         [].forEach.call(window.data.tickets, addPinToFragment);
         mapPin.appendChild(fragment);
         startMap = true;
@@ -46,9 +40,12 @@ window.pin = (function () {
       }
       this.activatedPin = pin;
     },
+    fadeMap: function () {
+      if (map.classList.contains('map--faded') === false) {
+        map.classList.add('map--faded');
+      }
+    },
     map: map,
     mapMarker: mapPin,
-    formFields: formFields,
-    noticeForm: noticeForm,
   };
 })();

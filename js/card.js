@@ -18,8 +18,21 @@ window.card = (function () {
     return '<li class="feature feature--' + element + '"></li>';
   }
 
+  function onCardCloserClick() {
+    card.classList.add('hidden');
+    if (window.pin.activatedPin !== false) {
+      window.pin.activatedPin.classList.remove('map__pin--active');
+    }
+  }
+
+  function onCardKeydown(evt) {
+    if (evt.keyCode === ESC_KEYCODE) {
+      onCardCloserClick();
+    }
+  }
+
   return {
-    render: function (newCard) {
+    setData: function (newCard) {
       card.querySelector('h3').textContent = newCard.offer.title;
       card.querySelector('small').textContent = newCard.offer.address;
       card.querySelector('.popup__price').innerHTML = newCard.offer.price + '&#x20bd;/ночь';
@@ -31,18 +44,18 @@ window.card = (function () {
       card.querySelector('p:last-of-type').textContent = newCard.offer.description;
       card.querySelector('.popup__avatar').src = newCard.author.avatar;
     },
-    onCardCloserClick: function () {
+    render: function (container) {
+      container.appendChild(card);
+    },
+    show: function () {
+      card.classList.remove('hidden');
+    },
+    hide: function () {
       card.classList.add('hidden');
-      if (window.pin.activatedPin !== false) {
-        window.pin.activatedPin.classList.remove('map__pin--active');
-      }
     },
-    onCardKeydown: function (evt) {
-      if (evt.keyCode === ESC_KEYCODE) {
-        this.onCardCloserClick();
-      }
+    setHandlers: function () {
+      cardCloser.addEventListener('click', onCardCloserClick);
+      document.addEventListener('keydown', onCardKeydown);
     },
-    label: card,
-    close: cardCloser,
   };
 })();

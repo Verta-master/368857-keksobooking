@@ -12,17 +12,27 @@
     min: 30,
     max: 100
   };
-  var addressField = window.pin.noticeForm.querySelector('#address');
-  var titleField = window.pin.noticeForm.querySelector('#title');
-  var priceField = window.pin.noticeForm.querySelector('#price');
-  var timeInField = window.pin.noticeForm.querySelector('#timein');
-  var timeOutField = window.pin.noticeForm.querySelector('#timeout');
-  var houseType = window.pin.noticeForm.querySelector('#type');
-  var roomNumber = window.pin.noticeForm.querySelector('#room_number');
-  var capacity = window.pin.noticeForm.querySelector('#capacity');
+  var formFields = document.querySelectorAll('fieldset');
+  var noticeForm = document.querySelector('.notice__form');
+  var addressField = noticeForm.querySelector('#address');
+  var titleField = noticeForm.querySelector('#title');
+  var priceField = noticeForm.querySelector('#price');
+  var timeInField = noticeForm.querySelector('#timein');
+  var timeOutField = noticeForm.querySelector('#timeout');
+  var houseType = noticeForm.querySelector('#type');
+  var roomNumber = noticeForm.querySelector('#room_number');
+  var capacity = noticeForm.querySelector('#capacity');
 
   function setFieldBorder(field, color) {
     field.style.borderColor = color;
+  }
+
+  function removeDisabled(item) {
+    item.removeAttribute('disabled', 'disabled');
+  }
+
+  function setDisabled(item) {
+    item.setAttribute('disabled', 'disabled');
   }
 
   function onTitleFieldInvalid(evt) {
@@ -77,7 +87,7 @@
     }
   }
 
-  window.pin.noticeForm.setAttribute('action', 'https://js.dump.academy/keksobooking');
+  noticeForm.setAttribute('action', 'https://js.dump.academy/keksobooking');
   addressField.setAttribute('readonly', 'true');
   addressField.setAttribute('required', 'true');
   addressField.setAttribute('value', 'Здесь будет адрес');
@@ -95,9 +105,27 @@
 
   titleField.addEventListener('invalid', onTitleFieldInvalid);
   priceField.addEventListener('invalid', onPriceFieldInvalid);
-
   timeInField.addEventListener('change', onTimeInFieldChange);
   timeOutField.addEventListener('change', onTimeOutFieldChange);
   houseType.addEventListener('change', onHouseTypeChange);
   roomNumber.addEventListener('change', onRoomNumberChange);
+
+  window.form = {
+    setFormDisabled: function () {
+      if (noticeForm.classList.contains('notice__form--disabled') === false) {
+        noticeForm.classList.add('notice__form--disabled');
+      }
+    },
+    setFormActive: function () {
+      if (noticeForm.classList.contains('notice__form--disabled') === true) {
+        noticeForm.classList.remove('notice__form--disabled');
+      }
+    },
+    setFieldsActive: function () {
+      formFields.forEach(removeDisabled);
+    },
+    setFieldsDisabled: function () {
+      formFields.forEach(setDisabled);
+    },
+  };
 })();
