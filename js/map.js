@@ -1,28 +1,27 @@
 'use strict';
 
 (function () {
-  var ESC_KEYCODE = 27;
+//  var ESC_KEYCODE = 27;
 
   var mainPin = document.querySelector('.map__pin--main');
 
   window.card.render(window.data.tickets[0]);
   window.pin.map.appendChild(window.card.label);
 
-
   // Обработка событий вывода карточки
 
-  function onCardCloserClick() {
-    window.card.label.classList.add('hidden');
-    if (window.pin.activatedPin !== false) {
-      window.pin.activatedPin.classList.remove('map__pin--active');
-    }
-  }
-
-  function onCardKeydown(evt) {
-    if (evt.keyCode === ESC_KEYCODE) {
-      onCardCloserClick();
-    }
-  }
+  //  function onCardCloserClick() {
+  //    window.card.label.classList.add('hidden');
+  //    if (window.pin.activatedPin !== false) {
+  //      window.pin.activatedPin.classList.remove('map__pin--active');
+  //    }
+  //  }
+  //
+  //  function onCardKeydown(evt) {
+  //    if (evt.keyCode === ESC_KEYCODE) {
+  //      onCardCloserClick();
+  //    }
+  //  }
 
   function onPinClick(evt) {
     var targetPin = (evt.target.classList.contains('map__pin')) ? evt.target : evt.target.parentNode;
@@ -37,8 +36,8 @@
 
   mainPin.addEventListener('mouseup', window.pin.onMainPinMouseUp);
   window.pin.mapMarker.addEventListener('click', onPinClick);
-  window.card.close.addEventListener('click', onCardCloserClick);
-  document.addEventListener('keydown', onCardKeydown);
+  window.card.close.addEventListener('click', window.card.onCardCloserClick);
+  document.addEventListener('keydown', window.card.onCardKeydown);
 
   // Начальное состояние
   function setDisabled(item) {

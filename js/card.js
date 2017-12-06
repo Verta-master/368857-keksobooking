@@ -2,6 +2,8 @@
 
 // Заполнение карточки
 window.card = (function () {
+  var ESC_KEYCODE = 27;
+
   var offerTypes = {
     flat: 'Квартира',
     house: 'Дом',
@@ -28,6 +30,17 @@ window.card = (function () {
       card.querySelector('.popup__features').insertAdjacentHTML('beforeend', newCard.offer.features.map(getFeaturesList).join(' '));
       card.querySelector('p:last-of-type').textContent = newCard.offer.description;
       card.querySelector('.popup__avatar').src = newCard.author.avatar;
+    },
+    onCardCloserClick: function () {
+      card.classList.add('hidden');
+      if (window.pin.activatedPin !== false) {
+        window.pin.activatedPin.classList.remove('map__pin--active');
+      }
+    },
+    onCardKeydown: function (evt) {
+      if (evt.keyCode === ESC_KEYCODE) {
+        this.onCardCloserClick();
+      }
     },
     label: card,
     close: cardCloser,
