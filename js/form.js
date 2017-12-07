@@ -90,7 +90,6 @@
   noticeForm.setAttribute('action', 'https://js.dump.academy/keksobooking');
   addressField.setAttribute('readonly', 'true');
   addressField.setAttribute('required', 'true');
-  addressField.setAttribute('value', 'Здесь будет адрес');
   titleField.setAttribute('minlength', titleLengths.min);
   titleField.setAttribute('maxlength', titleLengths.max);
   titleField.setAttribute('required', 'true');
@@ -127,5 +126,6 @@
     setFieldsDisabled: function () {
       formFields.forEach(setDisabled);
     },
+    address: addressField,
   };
 })();

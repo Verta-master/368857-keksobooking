@@ -3,6 +3,7 @@
 // Отрисовка маркеров
 window.pin = (function () {
   var pinWidth = 40;
+  var pinHeight = 40;
   var startMap = false;
   var map = document.querySelector('.map');
   var mapPin = document.querySelector('.map__pins');
@@ -12,9 +13,9 @@ window.pin = (function () {
     var newPin = document.querySelector('template').content.querySelector('.map__pin').cloneNode(true);
     newPin.querySelector('img').src = ticket.author.avatar;
     newPin.querySelector('img').width = pinWidth;
-    newPin.querySelector('img').height = window.shift.pinHeight;
+    newPin.querySelector('img').height = pinHeight;
     newPin.style.left = ticket.location.x + 'px';
-    newPin.style.top = window.shift.getPinShiftY(ticket.location.y) + 'px';
+    newPin.style.top = window.shift.getPinShiftY(ticket.location.y, pinHeight) + 'px';
     newPin.setAttribute('data-number', String(ticketNumber));
     fragment.appendChild(newPin);
   }

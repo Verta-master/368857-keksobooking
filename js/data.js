@@ -77,5 +77,6 @@
       return prices.max;
     },
     tickets: getTickets(TICKETS_NUMBER),
+    limitY: coords.y,
   };
 })();
