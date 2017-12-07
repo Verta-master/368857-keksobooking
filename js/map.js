@@ -77,7 +77,6 @@
       upEvt.preventDefault();
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
-      setAddress(finalCoords.x, finalCoords.y);
     }
 
     document.addEventListener('mousemove', onMouseMove);
