@@ -2,6 +2,7 @@
 
 (function () {
   var mainPinHeight = 65;
+  var pinShift = window.shift.halfPin(mainPinHeight);
   var mainPin = document.querySelector('.map__pin--main');
 
   function onPinClick(evt) {
@@ -59,10 +60,10 @@
 
       finalCoords.x = mainPin.offsetLeft - shift.x;
       var newY = mainPin.offsetTop - shift.y;
-      if (newY < parseInt(window.data.limitY.min, 10)) {
-        finalCoords.y = parseInt(window.data.limitY.min, 10);
-      } else if (newY > parseInt(window.data.limitY.max, 10)) {
-        finalCoords.y = parseInt(window.data.limitY.max, 10);
+      if (newY < (window.data.limitY.min - pinShift)) {
+        finalCoords.y = window.data.limitY.min - pinShift;
+      } else if (newY > (window.data.limitY.max - pinShift)) {
+        finalCoords.y = window.data.limitY.max - pinShift;
       } else {
         finalCoords.y = newY;
       }
