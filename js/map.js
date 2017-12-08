@@ -12,7 +12,8 @@
       window.pin.isActive(targetPin);
       targetPin.classList.add('map__pin--active');
       window.card.setData(window.data.tickets[pinNumber]);
-      window.card.show();
+      // window.card.show();
+      window.display.showCard();
     }
   }
 

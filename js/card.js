@@ -47,9 +47,9 @@ window.card = (function () {
     render: function (container) {
       container.appendChild(card);
     },
-    show: function () {
-      card.classList.remove('hidden');
-    },
+    // show: function () {
+    //   card.classList.remove('hidden');
+    // },
     hide: function () {
       card.classList.add('hidden');
     },
@@ -57,5 +57,6 @@ window.card = (function () {
       cardCloser.addEventListener('click', onCardCloserClick);
       document.addEventListener('keydown', onCardKeydown);
     },
+    label: card
   };
 })();

@@ -64,11 +64,13 @@
   }
 
   function onTimeInFieldChange(evt) {
-    timeOutField.value = evt.target.value;
+    // timeOutField.value = evt.target.value;
+    window.syncronizeFields.syncValues(timeOutField, evt.target.value);
   }
 
   function onTimeOutFieldChange(evt) {
-    timeInField.value = evt.target.value;
+    // timeInField.value = evt.target.value;
+    window.syncronizeFields.syncValues(timeInField, evt.target.value);
   }
 
   function onHouseTypeChange(evt) {
@@ -127,5 +129,6 @@
       formFields.forEach(setDisabled);
     },
     address: addressField,
+    noticeForm: noticeForm,
   };
 })();
