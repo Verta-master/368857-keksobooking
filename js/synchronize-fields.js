@@ -2,8 +2,8 @@
 
 (function () {
   window.syncronizeFields = {
-    syncValues: function (element, value) {
-      element.value = value;
+    syncValues: function (element, value, callback) {
+      callback(element, value);
     }
   };
 })();

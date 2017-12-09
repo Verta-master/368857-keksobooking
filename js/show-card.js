@@ -1,9 +1,8 @@
 'use strict';
 
 (function () {
-  window.display = {
-    showCard: function () {
-      window.card.label.classList.remove('hidden');
-    }
+  window.showCard = function (data) {
+    window.card.setData(data);
+    window.card.label.classList.remove('hidden');
   };
 })();
