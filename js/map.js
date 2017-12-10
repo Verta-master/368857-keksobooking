@@ -11,12 +11,11 @@
       var pinNumber = parseInt(targetPin.getAttribute('data-number'), 10);
       window.pin.isActive(targetPin);
       targetPin.classList.add('map__pin--active');
-      window.card.setData(window.data.tickets[pinNumber]);
-      window.card.show();
+      window.showCard(window.data.tickets[pinNumber]);
     }
   }
 
-  window.card.setData(window.data.tickets[0]);
+  window.showCard(window.data.tickets[0]);
   window.card.render(window.pin.map);
   mainPin.addEventListener('mouseup', window.pin.onMainPinMouseUp);
   window.pin.mapMarker.addEventListener('click', onPinClick);

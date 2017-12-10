@@ -63,16 +63,24 @@
     }
   }
 
+  function syncTime(element, value) {
+    element.value = value;
+  }
+
+  function syncType(element, value) {
+    element.setAttribute('min', value);
+  }
+
   function onTimeInFieldChange(evt) {
-    timeOutField.value = evt.target.value;
+    window.syncronizeFields.syncValues(timeOutField, evt.target.value, syncTime);
   }
 
   function onTimeOutFieldChange(evt) {
-    timeInField.value = evt.target.value;
+    window.syncronizeFields.syncValues(timeInField, evt.target.value, syncTime);
   }
 
   function onHouseTypeChange(evt) {
-    priceField.setAttribute('min', minPrices[evt.target.value]);
+    window.syncronizeFields.syncValues(priceField, minPrices[evt.target.value], syncType);
   }
 
   function onRoomNumberChange() {
@@ -127,5 +135,6 @@
       formFields.forEach(setDisabled);
     },
     address: addressField,
+    noticeForm: noticeForm,
   };
 })();
