@@ -4,6 +4,18 @@
   var mainPinHeight = 65;
   var pinShift = window.shift.halfPin(mainPinHeight);
   var mainPin = document.querySelector('.map__pin--main');
+  var tickets = [];
+
+  function successHandler(response) {
+    tickets = response.slice();
+    tickets.length = window.data.TICKETS_NUMBER;
+    window.card.render(window.pin.map);
+    mainPin.addEventListener('mouseup', window.pin.onMainPinMouseUp);
+    window.pin.mapMarker.addEventListener('click', onPinClick);
+    window.card.setHandlers();
+  }
+
+  window.backend.load(successHandler, window.backend.errorHandler);
 
   function onPinClick(evt) {
     var targetPin = (evt.target.classList.contains('map__pin')) ? evt.target : evt.target.parentNode;
@@ -11,15 +23,9 @@
       var pinNumber = parseInt(targetPin.getAttribute('data-number'), 10);
       window.pin.isActive(targetPin);
       targetPin.classList.add('map__pin--active');
-      window.showCard(window.data.tickets[pinNumber]);
+      window.showCard(tickets[pinNumber]);
     }
   }
-
-  window.showCard(window.data.tickets[0]);
-  window.card.render(window.pin.map);
-  mainPin.addEventListener('mouseup', window.pin.onMainPinMouseUp);
-  window.pin.mapMarker.addEventListener('click', onPinClick);
-  window.card.setHandlers();
 
   // Начальное состояние
   window.pin.fadeMap();
