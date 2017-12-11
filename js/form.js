@@ -117,6 +117,15 @@
   houseType.addEventListener('change', onHouseTypeChange);
   roomNumber.addEventListener('change', onRoomNumberChange);
 
+  noticeForm.addEventListener('submit', function (evt) {
+    window.backend.save(new FormData(noticeForm), function () {
+      // go to default values
+      titleField.value = '';
+      addressField.value = '';
+    }, window.backend.errorHandler);
+    evt.preventDefault();
+  });
+
   window.form = {
     setFormDisabled: function () {
       if (noticeForm.classList.contains('notice__form--disabled') === false) {

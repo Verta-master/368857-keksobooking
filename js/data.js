@@ -30,43 +30,52 @@
     min: 0,
     max: 10
   };
+  var arrayOfTickets = [];
 
   // Заполнение массива данных
-  function createTicket(number) {
-    var locationX = window.utilities.getRandomInt(coords.x.min, coords.x.max);
-    var locationY = window.utilities.getRandomInt(coords.y.min, coords.y.max);
-    var ticket = {
-      author: {
-        avatar: 'img/avatars/user0' + String(number) + '.png'
-      },
-      offer: {
-        title: arrTitles.splice(window.utilities.getRandomInt(0, arrTitles.length), 1),
-        address: '(' + String(locationX) + ', ' + String(locationY) + ')',
-        price: window.utilities.getRandomInt(prices.min, prices.max),
-        type: window.utilities.getRandomArrayElement(OFFER_TYPES),
-        room: window.utilities.getRandomInt(rooms.min, rooms.max + 1),
-        guests: window.utilities.getRandomInt(guests.min, guests.max + 1),
-        checkin: window.utilities.getRandomArrayElement(OFFER_CHECKINS),
-        checkout: window.utilities.getRandomArrayElement(OFFER_CHECKOUTS),
-        features: [],
-        description: '',
-        photos: []
-      },
-      location: {
-        x: locationX,
-        y: locationY
-      }
-    };
-    ticket.offer.features = window.utilities.getUniqueArray(OFFER_FEATURES).slice();
-    return ticket;
+//  function createTicket(number) {
+//    var locationX = window.utilities.getRandomInt(coords.x.min, coords.x.max);
+//    var locationY = window.utilities.getRandomInt(coords.y.min, coords.y.max);
+//    var ticket = {
+//      author: {
+//        avatar: 'img/avatars/user0' + String(number) + '.png'
+//      },
+//      offer: {
+//        title: arrTitles.splice(window.utilities.getRandomInt(0, arrTitles.length), 1),
+//        address: '(' + String(locationX) + ', ' + String(locationY) + ')',
+//        price: window.utilities.getRandomInt(prices.min, prices.max),
+//        type: window.utilities.getRandomArrayElement(OFFER_TYPES),
+//        room: window.utilities.getRandomInt(rooms.min, rooms.max + 1),
+//        guests: window.utilities.getRandomInt(guests.min, guests.max + 1),
+//        checkin: window.utilities.getRandomArrayElement(OFFER_CHECKINS),
+//        checkout: window.utilities.getRandomArrayElement(OFFER_CHECKOUTS),
+//        features: [],
+//        description: '',
+//        photos: []
+//      },
+//      location: {
+//        x: locationX,
+//        y: locationY
+//      }
+//    };
+//    ticket.offer.features = window.utilities.getUniqueArray(OFFER_FEATURES).slice();
+//    return ticket;
+//  }
+
+  function successHandler(xhr) {
+    var arrayOfTickets = xhr.response.slice();
+    return arrayOfTickets;
   }
 
   function getTickets(numberOfElements) {
-    var arrayOfTickets = [];
-    for (var i = 0; i < numberOfElements; i++) {
-      arrayOfTickets.push(createTicket(i + 1));
-    }
-    return arrayOfTickets;
+//    var arrayOfTickets = [];
+//    for (var i = 0; i < numberOfElements; i++) {
+//      arrayOfTickets.push(createTicket(i + 1));
+//    }
+    var newArray = window.backend.load(successHandler, window.backend.errorHandler);
+    console.log(newArray);
+//    arrayOfTickets.length = numberOfElements;
+    return newArray;
   }
 
   window.data = {
