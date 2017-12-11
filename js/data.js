@@ -30,7 +30,6 @@
     min: 0,
     max: 10
   };
-  var arrayOfTickets = [];
 
   // Заполнение массива данных
   function createTicket(number) {

@@ -37,11 +37,10 @@
 
       xhr.open('GET', SERVER_URL + '/data');
       xhr.send();
-      return xhr;
     },
     errorHandler: function (errorMessage) {
       var message = document.createElement('div');
-      message.style ='z-index: 100; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; font-size: 30px; color: red; border: 1px solid red; background-color: #ffffff';
+      message.style = 'z-index: 100; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; font-size: 30px; color: red; border: 1px solid red; background-color: #ffffff';
       message.textContent = errorMessage;
       document.body.insertAdjacentElement('afterbegin', message);
     }

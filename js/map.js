@@ -4,11 +4,10 @@
   var mainPinHeight = 65;
   var pinShift = window.shift.halfPin(mainPinHeight);
   var mainPin = document.querySelector('.map__pin--main');
-  var tickets = [];
 
   function successHandler(response) {
-    tickets = response.slice();
-    tickets.length = window.data.TICKETS_NUMBER;
+    window.data.tickets = response.slice();
+    window.data.tickets.length = window.data.TICKETS_NUMBER;
     window.card.render(window.pin.map);
     mainPin.addEventListener('mouseup', window.pin.onMainPinMouseUp);
     window.pin.mapMarker.addEventListener('click', onPinClick);
@@ -23,7 +22,7 @@
       var pinNumber = parseInt(targetPin.getAttribute('data-number'), 10);
       window.pin.isActive(targetPin);
       targetPin.classList.add('map__pin--active');
-      window.showCard(tickets[pinNumber]);
+      window.showCard(window.data.tickets[pinNumber]);
     }
   }
 
