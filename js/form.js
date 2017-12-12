@@ -74,13 +74,12 @@
     }
   }
 
-  function onAddressFieldInvalid(evt) {
-    if (evt.target.validity.valueMissing) {
-      setFieldBorder(evt.target, 'red');
-      evt.target.setCustomValidity('Обязательное поле - передвиньте маркер на карте');
+  function onAddressFieldInvalid() {
+    if (addressField.value === '') {
+      setFieldBorder(addressField, 'red');
+      addressField.setCustomValidity('Обязательное поле - передвиньте маркер на карте');
     } else {
-      evt.target.setCustomValidity('');
-      setFieldBorder(evt.target, 'transparent');
+      setFieldBorder(addressField, 'transparent');
     }
   }
 
