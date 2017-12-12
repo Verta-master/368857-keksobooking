@@ -78,11 +78,18 @@
     if (evt.target.validity.valueMissing) {
       setFieldBorder(evt.target, 'red');
       evt.target.setCustomValidity('Обязательное поле - передвиньте маркер на карте');
-      evt.target.value = 'Обязательное поле - передвиньте маркер на карте';
     } else {
       evt.target.setCustomValidity('');
       setFieldBorder(evt.target, 'transparent');
     }
+  }
+
+  function onAddressFieldFocusIn() {
+    addressField.setAttribute('readonly', 'true');
+  }
+
+  function onAddressFieldFocusOut() {
+    addressField.setAttribute('readonly', 'false');
   }
 
   function syncTime(element, value) {
@@ -127,14 +134,6 @@
   priceField.setAttribute('max', window.data.getMaxPrice());
   priceField.setAttribute('value', window.data.getMinPrice());
   capacity.value = roomNumber.value;
-
-  function onAddressFieldFocusIn() {
-    addressField.setAttribute('readonly', 'true');
-  }
-
-  function onAddressFieldFocusOut() {
-    addressField.setAttribute('readonly', 'false');
-  }
 
   titleField.addEventListener('invalid', onTitleFieldInvalid);
   priceField.addEventListener('invalid', onPriceFieldInvalid);
