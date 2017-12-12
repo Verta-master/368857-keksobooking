@@ -12,6 +12,14 @@
     min: 30,
     max: 100
   };
+  var initValues = {
+    type: 'flat',
+    price: 1000,
+    timein: '12:00',
+    timeout: '12:00',
+    room: 1,
+    capacity: 1
+  };
   var formFields = document.querySelectorAll('fieldset');
   var noticeForm = document.querySelector('.notice__form');
   var addressField = noticeForm.querySelector('#address');
@@ -22,6 +30,9 @@
   var houseType = noticeForm.querySelector('#type');
   var roomNumber = noticeForm.querySelector('#room_number');
   var capacity = noticeForm.querySelector('#capacity');
+  var features = noticeForm.querySelectorAll('input[type="checkbox"]');
+  var description = noticeForm.querySelector('#description');
+  var imageLoad = noticeForm.querySelector('#images');
 
   function setFieldBorder(field, color) {
     field.style.borderColor = color;
@@ -57,6 +68,16 @@
       evt.target.setCustomValidity('Максимальное значение: ' + evt.target.getAttribute('max'));
     } else if (evt.target.validity.valueMissing) {
       evt.target.setCustomValidity('Обязательное поле');
+    } else {
+      evt.target.setCustomValidity('');
+      setFieldBorder(evt.target, 'transparent');
+    }
+  }
+
+  function onAddressFieldInvalid(evt) {
+    if (evt.target.validity.valueMissing) {
+      setFieldBorder(evt.target, 'red');
+      evt.target.setCustomValidity('Обязательное поле - передвиньте маркер на карте');
     } else {
       evt.target.setCustomValidity('');
       setFieldBorder(evt.target, 'transparent');
@@ -112,19 +133,33 @@
 
   titleField.addEventListener('invalid', onTitleFieldInvalid);
   priceField.addEventListener('invalid', onPriceFieldInvalid);
+  addressField.addEventListener('invalid', onAddressFieldInvalid);
   timeInField.addEventListener('change', onTimeInFieldChange);
   timeOutField.addEventListener('change', onTimeOutFieldChange);
   houseType.addEventListener('change', onHouseTypeChange);
   roomNumber.addEventListener('change', onRoomNumberChange);
 
-  noticeForm.addEventListener('submit', function (evt) {
-    window.backend.save(new FormData(noticeForm), function () {
-      // go to default values
-      titleField.value = '';
-      addressField.value = '';
-    }, window.backend.errorHandler);
+  function resetForm() {
+    titleField.value = '';
+    houseType.value = initValues.type;
+    priceField.value = initValues.price;
+    timeInField.value = initValues.timein;
+    timeOutField.value = initValues.timeout;
+    roomNumber.value = initValues.room;
+    capacity.value = initValues.capacity;
+    for (i = 0; i < features.length; i++) {
+      features[i].checked = false;
+    }
+    description.value = '';
+    imageLoad.value = '';
+  }
+
+  function onSuccessSubmit(evt) {
+    window.backend.save(new FormData(noticeForm), resetForm, window.backend.errorHandler);
     evt.preventDefault();
-  });
+  }
+
+  noticeForm.addEventListener('submit', onSuccessSubmit);
 
   window.form = {
     setFormDisabled: function () {
@@ -145,5 +180,6 @@
     },
     address: addressField,
     noticeForm: noticeForm,
+    reset: resetForm,
   };
 })();

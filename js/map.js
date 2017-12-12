@@ -5,7 +5,7 @@
   var pinShift = window.shift.halfPin(mainPinHeight);
   var mainPin = document.querySelector('.map__pin--main');
 
-  function successHandler(response) {
+  function onSuccessLoad(response) {
     window.data.tickets = response.slice();
     window.data.tickets.length = window.data.TICKETS_NUMBER;
     window.card.render(window.pin.map);
@@ -14,7 +14,7 @@
     window.card.setHandlers();
   }
 
-  window.backend.load(successHandler, window.backend.errorHandler);
+  window.backend.load(onSuccessLoad, window.backend.errorHandler);
 
   function onPinClick(evt) {
     var targetPin = (evt.target.classList.contains('map__pin')) ? evt.target : evt.target.parentNode;
@@ -31,6 +31,7 @@
   window.card.hide();
   window.form.setFormDisabled();
   window.form.setFieldsDisabled();
+  window.form.reset();
 
   // Перемещение главного пина
   mainPin.addEventListener('mousedown', function (evt) {

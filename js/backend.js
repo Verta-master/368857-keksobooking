@@ -3,7 +3,7 @@
 (function () {
   var SERVER_URL = 'https://1510.dump.academy/keksobooking';
 
-  var setup = function (onLoad, onError) {
+  function setup(onLoad, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
@@ -23,7 +23,7 @@
 
     xhr.timeout = 10000;
     return xhr;
-  };
+  }
 
   window.backend = {
     save: function (data, onLoad, onError) {
