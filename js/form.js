@@ -74,13 +74,13 @@
     }
   }
 
-  function onAddressFieldInvalid(evt) {
-    if (evt.target.validity.valueMissing) {
-      setFieldBorder(evt.target, 'red');
-      evt.target.setCustomValidity('Обязательное поле - передвиньте маркер на карте');
+  function onAddressFieldInvalid() {
+    if (addressField.validity.valueMissing) {
+      setFieldBorder(addressField, 'red');
+      addressField.setCustomValidity('Обязательное поле - передвиньте маркер на карте');
     } else {
-      evt.target.setCustomValidity('');
-      setFieldBorder(evt.target, 'transparent');
+      addressField.setCustomValidity('');
+      setFieldBorder(addressField, 'transparent');
     }
   }
 
@@ -117,8 +117,7 @@
   }
 
   noticeForm.setAttribute('action', 'https://js.dump.academy/keksobooking');
-  addressField.setAttribute('readonly', 'true');
-  addressField.setAttribute('required', 'true');
+  // addressField.setAttribute('readonly', 'true');
   titleField.setAttribute('minlength', titleLengths.min);
   titleField.setAttribute('maxlength', titleLengths.max);
   titleField.setAttribute('required', 'true');
@@ -127,12 +126,19 @@
   priceField.setAttribute('max', window.data.getMaxPrice());
   priceField.setAttribute('value', window.data.getMinPrice());
   capacity.value = roomNumber.value;
-  for (var i = 0; i < capacity.length; i++) {
-    capacity.options[i].setAttribute('disabled', 'disabled');
+
+  function onAddressFieldFocusIn() {
+    addressField.setAttribute('readonly', 'true');
+  }
+
+  function onAddressFieldFocusOut() {
+    addressField.setAttribute('readonly', 'false');
   }
 
   titleField.addEventListener('invalid', onTitleFieldInvalid);
   priceField.addEventListener('invalid', onPriceFieldInvalid);
+  addressField.addEventListener('focusin', onAddressFieldFocusIn);
+  addressField.addEventListener('focusout', onAddressFieldFocusOut);
   addressField.addEventListener('invalid', onAddressFieldInvalid);
   timeInField.addEventListener('change', onTimeInFieldChange);
   timeOutField.addEventListener('change', onTimeOutFieldChange);
@@ -147,8 +153,8 @@
     timeOutField.value = initValues.timeout;
     roomNumber.value = initValues.room;
     capacity.value = initValues.capacity;
-    for (i = 0; i < features.length; i++) {
-      features[i].checked = false;
+    for (var k = 0; k < features.length; k++) {
+      features[k].checked = false;
     }
     description.value = '';
     imageLoad.value = '';
