@@ -74,13 +74,14 @@
     }
   }
 
-  function onAddressFieldInvalid() {
-    if (addressField.validity.valueMissing) {
-      setFieldBorder(addressField, 'red');
-      addressField.setCustomValidity('Обязательное поле - передвиньте маркер на карте');
+  function onAddressFieldInvalid(evt) {
+    if (evt.target.validity.valueMissing) {
+      setFieldBorder(evt.target, 'red');
+      evt.target.setCustomValidity('Обязательное поле - передвиньте маркер на карте');
+      evt.target.value = 'Обязательное поле - передвиньте маркер на карте';
     } else {
-      addressField.setCustomValidity('');
-      setFieldBorder(addressField, 'transparent');
+      evt.target.setCustomValidity('');
+      setFieldBorder(evt.target, 'transparent');
     }
   }
 
@@ -117,7 +118,7 @@
   }
 
   noticeForm.setAttribute('action', 'https://js.dump.academy/keksobooking');
-  // addressField.setAttribute('readonly', 'true');
+  addressField.setAttribute('required', 'true');
   titleField.setAttribute('minlength', titleLengths.min);
   titleField.setAttribute('maxlength', titleLengths.max);
   titleField.setAttribute('required', 'true');
