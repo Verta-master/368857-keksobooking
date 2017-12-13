@@ -78,5 +78,6 @@
     },
     tickets: getTickets(TICKETS_NUMBER),
     limitY: coords.y,
+    TICKETS_NUMBER: TICKETS_NUMBER,
   };
 })();

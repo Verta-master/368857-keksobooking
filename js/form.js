@@ -12,6 +12,14 @@
     min: 30,
     max: 100
   };
+  var initValues = {
+    type: 'flat',
+    price: 1000,
+    timein: '12:00',
+    timeout: '12:00',
+    room: 1,
+    capacity: 1
+  };
   var formFields = document.querySelectorAll('fieldset');
   var noticeForm = document.querySelector('.notice__form');
   var addressField = noticeForm.querySelector('#address');
@@ -22,6 +30,9 @@
   var houseType = noticeForm.querySelector('#type');
   var roomNumber = noticeForm.querySelector('#room_number');
   var capacity = noticeForm.querySelector('#capacity');
+  var features = noticeForm.querySelectorAll('input[type="checkbox"]');
+  var description = noticeForm.querySelector('#description');
+  var imageLoad = noticeForm.querySelector('#images');
 
   function setFieldBorder(field, color) {
     field.style.borderColor = color;
@@ -96,8 +107,8 @@
   }
 
   noticeForm.setAttribute('action', 'https://js.dump.academy/keksobooking');
-  addressField.setAttribute('readonly', 'true');
   addressField.setAttribute('required', 'true');
+  addressField.setAttribute('readonly', 'true');
   titleField.setAttribute('minlength', titleLengths.min);
   titleField.setAttribute('maxlength', titleLengths.max);
   titleField.setAttribute('required', 'true');
@@ -106,9 +117,6 @@
   priceField.setAttribute('max', window.data.getMaxPrice());
   priceField.setAttribute('value', window.data.getMinPrice());
   capacity.value = roomNumber.value;
-  for (var i = 0; i < capacity.length; i++) {
-    capacity.options[i].setAttribute('disabled', 'disabled');
-  }
 
   titleField.addEventListener('invalid', onTitleFieldInvalid);
   priceField.addEventListener('invalid', onPriceFieldInvalid);
@@ -116,6 +124,28 @@
   timeOutField.addEventListener('change', onTimeOutFieldChange);
   houseType.addEventListener('change', onHouseTypeChange);
   roomNumber.addEventListener('change', onRoomNumberChange);
+
+  function resetForm() {
+    titleField.value = '';
+    houseType.value = initValues.type;
+    priceField.value = initValues.price;
+    timeInField.value = initValues.timein;
+    timeOutField.value = initValues.timeout;
+    roomNumber.value = initValues.room;
+    capacity.value = initValues.capacity;
+    for (var k = 0; k < features.length; k++) {
+      features[k].checked = false;
+    }
+    description.value = '';
+    imageLoad.value = '';
+  }
+
+  function onSuccessSubmit(evt) {
+    window.backend.save(new FormData(noticeForm), resetForm, window.backend.errorHandler);
+    evt.preventDefault();
+  }
+
+  noticeForm.addEventListener('submit', onSuccessSubmit);
 
   window.form = {
     setFormDisabled: function () {
@@ -136,5 +166,6 @@
     },
     address: addressField,
     noticeForm: noticeForm,
+    reset: resetForm,
   };
 })();
