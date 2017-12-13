@@ -6,7 +6,7 @@
   var OFFER_CHECKINS = ['12:00', '13:00', '14:00'];
   var OFFER_CHECKOUTS = ['12:00', '13:00', '14:00'];
   var OFFER_FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-  var TICKETS_NUMBER = 8;
+  var TICKETS_NUMBER = 5;
   var arrTitles = OFFER_TITLES.slice();
   var coords = {
     x: {

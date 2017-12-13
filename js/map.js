@@ -6,11 +6,15 @@
   var mainPin = document.querySelector('.map__pin--main');
 
   function onSuccessLoad(response) {
-    window.data.tickets = response.slice(0, window.data.TICKETS_NUMBER);
+    window.data.tickets = response.slice();
     window.card.render(window.pin.map);
     mainPin.addEventListener('mouseup', window.pin.onMainPinMouseUp);
     window.pin.mapMarker.addEventListener('click', onPinClick);
     window.card.setHandlers();
+    window.pin.housingType.addEventListener('change', window.pin.onHousingTypeChange);
+    window.pin.housingPrice.addEventListener('change', window.pin.onHousingPriceChange);
+    window.pin.roomNumber.addEventListener('change', window.pin.onRoomNumberChange);
+    window.pin.guestNumber.addEventListener('change', window.pin.onGuestNumberChange);
   }
 
   window.backend.load(onSuccessLoad, window.backend.errorHandler);
@@ -22,6 +26,7 @@
       window.pin.isActive(targetPin);
       targetPin.classList.add('map__pin--active');
       window.showCard(window.data.tickets[pinNumber]);
+      // window.showCard(window.pin.filteredData[pinNumber]);
     }
   }
 
