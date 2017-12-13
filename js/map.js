@@ -6,8 +6,7 @@
   var mainPin = document.querySelector('.map__pin--main');
 
   function onSuccessLoad(response) {
-    window.data.tickets = response.slice();
-    window.data.tickets.length = window.data.TICKETS_NUMBER;
+    window.data.tickets = response.slice(0, window.data.TICKETS_NUMBER);
     window.card.render(window.pin.map);
     mainPin.addEventListener('mouseup', window.pin.onMainPinMouseUp);
     window.pin.mapMarker.addEventListener('click', onPinClick);
@@ -32,6 +31,7 @@
   window.form.setFormDisabled();
   window.form.setFieldsDisabled();
   window.form.reset();
+  window.form.address.value = 'x: ' + mainPin.offsetLeft + ', y: ' + window.shift.getMainPinY(mainPin.offsetTop, mainPinHeight);
 
   // Перемещение главного пина
   mainPin.addEventListener('mousedown', function (evt) {
@@ -46,8 +46,7 @@
     };
 
     function setAddress(x, y) {
-      var address = 'x: ' + x + ', y: ' + window.shift.getMainPinY(y, mainPinHeight);
-      window.form.address.setAttribute('value', address);
+      window.form.address.value = 'x: ' + x + ', y: ' + window.shift.getMainPinY(y, mainPinHeight);
     }
 
     function onMouseMove(moveEvt) {

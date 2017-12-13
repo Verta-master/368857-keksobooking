@@ -74,23 +74,6 @@
     }
   }
 
-  function onAddressFieldInvalid() {
-    if (addressField.value === '') {
-      setFieldBorder(addressField, 'red');
-      addressField.setCustomValidity('Обязательное поле - передвиньте маркер на карте');
-    } else {
-      setFieldBorder(addressField, 'transparent');
-    }
-  }
-
-  function onAddressFieldFocusIn() {
-    addressField.setAttribute('readonly', 'true');
-  }
-
-  function onAddressFieldFocusOut() {
-    addressField.setAttribute('readonly', 'false');
-  }
-
   function syncTime(element, value) {
     element.value = value;
   }
@@ -125,6 +108,7 @@
 
   noticeForm.setAttribute('action', 'https://js.dump.academy/keksobooking');
   addressField.setAttribute('required', 'true');
+  addressField.setAttribute('readonly', 'true');
   titleField.setAttribute('minlength', titleLengths.min);
   titleField.setAttribute('maxlength', titleLengths.max);
   titleField.setAttribute('required', 'true');
@@ -136,9 +120,6 @@
 
   titleField.addEventListener('invalid', onTitleFieldInvalid);
   priceField.addEventListener('invalid', onPriceFieldInvalid);
-  addressField.addEventListener('focusin', onAddressFieldFocusIn);
-  addressField.addEventListener('focusout', onAddressFieldFocusOut);
-  addressField.addEventListener('invalid', onAddressFieldInvalid);
   timeInField.addEventListener('change', onTimeInFieldChange);
   timeOutField.addEventListener('change', onTimeOutFieldChange);
   houseType.addEventListener('change', onHouseTypeChange);

@@ -18,6 +18,10 @@ window.card = (function () {
     return '<li class="feature feature--' + element + '"></li>';
   }
 
+  function getPhotosList(element) {
+    return '<li><img src="' + element + '"></li>';
+  }
+
   function onCardCloserClick() {
     card.classList.add('hidden');
     if (window.pin.activatedPin !== false) {
@@ -43,6 +47,8 @@ window.card = (function () {
       card.querySelector('.popup__features').insertAdjacentHTML('beforeend', newCard.offer.features.map(getFeaturesList).join(' '));
       card.querySelector('p:last-of-type').textContent = newCard.offer.description;
       card.querySelector('.popup__avatar').src = newCard.author.avatar;
+      card.querySelector('.popup__pictures').innerHTML = '';
+      card.querySelector('.popup__pictures').insertAdjacentHTML('beforeend', newCard.offer.photos.map(getPhotosList).join(' '));
     },
     render: function (container) {
       container.appendChild(card);
