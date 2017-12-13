@@ -19,7 +19,7 @@ window.card = (function () {
   }
 
   function getPhotosList(element) {
-    return '<li><img src="' + element + '"></li>';
+    return '<li><img src="' + element + '" width="' + 100 + '"></li>';
   }
 
   function onCardCloserClick() {
