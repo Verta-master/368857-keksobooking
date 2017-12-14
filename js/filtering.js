@@ -11,12 +11,6 @@ window.filtering = (function () {
   var roomNumber = document.querySelector('#housing-rooms');
   var guestNumber = document.querySelector('#housing-guests');
   var featureContainer = document.querySelector('#housing-features');
-  var wifi = document.querySelector('#filter-wifi');
-  var dishwasher = document.querySelector('#filter-dishwasher');
-  var parking = document.querySelector('#filter-parking');
-  var washer = document.querySelector('#filter-washer');
-  var elevator = document.querySelector('#filter-elevator');
-  var conditioner = document.querySelector('#filter-conditioner');
 
   function housingTypeFiltering(evt) {
     var houseFilter = (evt.offer.type === housingType.value || housingType.value === 'any') ? 1 : 0;
@@ -57,24 +51,11 @@ window.filtering = (function () {
     return guestFilter;
   }
 
-//  function isFeature(customArray, featureName) {
-//    [].reduce.call(customArray, function(item) {
-//      var featureFilter = (item.offer.features.indexOf(featureName) === -1) ? 0 : 1;
-//      return featureFilter;
-//    });
-//  }
-  function isFeature() {
-    [].forEach.call(window.data.tickets, function(item) {
-      var featureFilter = (item.offer.features.indexOf(this) === -1) ? 0 : 1;
-      return featureFilter;
-    });
-  }
-
   function filtrate(customArray, filterFunction) {
     return customArray.filter(filterFunction).slice(0, window.data.TICKETS_NUMBER);
   }
 
- return {
+  return {
     housingType: housingType,
     housingPrice: housingPrice,
     roomNumber: roomNumber,
@@ -93,13 +74,18 @@ window.filtering = (function () {
       return filtrate(window.data.tickets, guestNumberFiltering);
     },
     filtrateFeature: function () {
+      var checkedData = [];
       for (var k = 0; k < featureContainer.childElementCount; k++) {
         if (featureContainer.children[k].checked) {
-          var data = window.data.tickets.filter(isFeature, featureContainer.children[k].value).slice(0, window.data.TICKETS_NUMBER);
-          // isFeature(window.data.tickets, featureContainer.children[k].value);
+          checkedData.push(featureContainer.children[k].value);
         }
       }
-      return data;
+      var filteredData = window.data.tickets.filter(function (item) {
+        return item.offer.features.some(function (element) {
+          return checkedData.includes(element);
+        });
+      });
+      return filteredData.slice(0, window.data.TICKETS_NUMBER);
     }
   };
 })();
