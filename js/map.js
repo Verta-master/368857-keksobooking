@@ -1,6 +1,16 @@
 'use strict';
 
 (function () {
+  var limits = {
+    x: {
+      min: 300,
+      max: 900
+    },
+    y: {
+      min: 100,
+      max: 500
+    }
+  };
   var mainPinHeight = 65;
   var pinShift = window.shift.halfPin(mainPinHeight);
   var mainPin = document.querySelector('.map__pin--main');
@@ -11,11 +21,17 @@
     mainPin.addEventListener('mouseup', window.pin.onMainPinMouseUp);
     window.pin.mapMarker.addEventListener('click', onPinClick);
     window.card.setHandlers();
-    window.filtering.housingType.addEventListener('change', window.pin.onHousingTypeChange);
-    window.filtering.housingPrice.addEventListener('change', window.pin.onHousingPriceChange);
-    window.filtering.roomNumber.addEventListener('change', window.pin.onRoomNumberChange);
-    window.filtering.guestNumber.addEventListener('change', window.pin.onGuestNumberChange);
-    window.filtering.feature.addEventListener('change', window.pin.onFeatureChange);
+    window.filtering.housingType.addEventListener('change', window.pin.onFilterChange);
+    window.filtering.housingPrice.addEventListener('change', window.pin.onFilterChange);
+    window.filtering.roomNumber.addEventListener('change', window.pin.onFilterChange);
+    window.filtering.guestNumber.addEventListener('change', window.pin.onFilterChange);
+    window.filtering.feature.addEventListener('change', window.pin.onFilterChange);
+
+//    window.filtering.housingType.addEventListener('change', window.pin.onHousingTypeChange);
+//    window.filtering.housingPrice.addEventListener('change', window.pin.onHousingPriceChange);
+//    window.filtering.roomNumber.addEventListener('change', window.pin.onRoomNumberChange);
+//    window.filtering.guestNumber.addEventListener('change', window.pin.onGuestNumberChange);
+//    window.filtering.feature.addEventListener('change', window.pin.onFeatureChange);
   }
 
   window.backend.load(onSuccessLoad, window.backend.errorHandler);
@@ -70,10 +86,10 @@
 
       finalCoords.x = mainPin.offsetLeft - shift.x;
       var newY = mainPin.offsetTop - shift.y;
-      if (newY < (window.data.limitY.min - pinShift)) {
-        finalCoords.y = window.data.limitY.min - pinShift;
-      } else if (newY > (window.data.limitY.max - pinShift)) {
-        finalCoords.y = window.data.limitY.max - pinShift;
+      if (newY < (limits.y.min - pinShift)) {
+        finalCoords.y = limits.y.min - pinShift;
+      } else if (newY > (limits.y.max - pinShift)) {
+        finalCoords.y = limits.y.max - pinShift;
       } else {
         finalCoords.y = newY;
       }

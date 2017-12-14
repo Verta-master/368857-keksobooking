@@ -61,26 +61,26 @@ window.filtering = (function () {
     roomNumber: roomNumber,
     guestNumber: guestNumber,
     feature: featureContainer,
-    filtrateHouseType: function () {
-      return filtrate(window.data.tickets, housingTypeFiltering);
+    filtrateHouseType: function (customArray) {
+      return filtrate(customArray, housingTypeFiltering);
     },
-    filtrateHousePrice: function () {
-      return filtrate(window.data.tickets, housingPriceFiltering);
+    filtrateHousePrice: function (customArray) {
+      return filtrate(customArray, housingPriceFiltering);
     },
-    filtrateRoomNumber: function () {
-      return filtrate(window.data.tickets, roomNumberFiltering);
+    filtrateRoomNumber: function (customArray) {
+      return filtrate(customArray, roomNumberFiltering);
     },
-    filtrateGuestNumber: function () {
-      return filtrate(window.data.tickets, guestNumberFiltering);
+    filtrateGuestNumber: function (customArray) {
+      return filtrate(customArray, guestNumberFiltering);
     },
-    filtrateFeature: function () {
+    filtrateFeature: function (customArray) {
       var checkedData = [];
       for (var k = 0; k < featureContainer.childElementCount; k++) {
         if (featureContainer.children[k].checked) {
           checkedData.push(featureContainer.children[k].value);
         }
       }
-      var filteredData = window.data.tickets.filter(function (item) {
+      var filteredData = customArray.filter(function (item) {
         return item.offer.features.some(function (element) {
           return checkedData.includes(element);
         });
