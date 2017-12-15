@@ -21,17 +21,11 @@
     mainPin.addEventListener('mouseup', window.pin.onMainPinMouseUp);
     window.pin.mapMarker.addEventListener('click', onPinClick);
     window.card.setHandlers();
-    window.filtering.housingType.addEventListener('change', window.pin.onFilterChange);
-    window.filtering.housingPrice.addEventListener('change', window.pin.onFilterChange);
-    window.filtering.roomNumber.addEventListener('change', window.pin.onFilterChange);
-    window.filtering.guestNumber.addEventListener('change', window.pin.onFilterChange);
-    window.filtering.feature.addEventListener('change', window.pin.onFilterChange);
-
-//    window.filtering.housingType.addEventListener('change', window.pin.onHousingTypeChange);
-//    window.filtering.housingPrice.addEventListener('change', window.pin.onHousingPriceChange);
-//    window.filtering.roomNumber.addEventListener('change', window.pin.onRoomNumberChange);
-//    window.filtering.guestNumber.addEventListener('change', window.pin.onGuestNumberChange);
-//    window.filtering.feature.addEventListener('change', window.pin.onFeatureChange);
+    window.filtering.housingType.addEventListener('change', window.filtering.onFilterChange);
+    window.filtering.housingPrice.addEventListener('change', window.filtering.onFilterChange);
+    window.filtering.roomNumber.addEventListener('change', window.filtering.onFilterChange);
+    window.filtering.guestNumber.addEventListener('change', window.filtering.onFilterChange);
+    window.filtering.feature.addEventListener('change', window.filtering.onFilterChange);
   }
 
   window.backend.load(onSuccessLoad, window.backend.errorHandler);
@@ -43,7 +37,7 @@
       window.pin.isActive(targetPin);
       targetPin.classList.add('map__pin--active');
       // window.showCard(window.data.tickets[pinNumber]);
-      window.showCard(window.pin.filteredData[pinNumber]);
+      window.showCard(window.filtering.filteredData[pinNumber]);
     }
   }
 

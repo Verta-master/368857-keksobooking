@@ -6,6 +6,7 @@ window.filtering = (function () {
     low: 10000,
     middle: 50000
   };
+  var filteredPins = window.data.tickets;
   var housingType = document.querySelector('#housing-type');
   var housingPrice = document.querySelector('#housing-price');
   var roomNumber = document.querySelector('#housing-rooms');
@@ -55,37 +56,56 @@ window.filtering = (function () {
     return customArray.filter(filterFunction).slice(0, window.data.TICKETS_NUMBER);
   }
 
+  function filtrateHouseType(customArray) {
+    return filtrate(customArray, housingTypeFiltering);
+  };
+
+  function filtrateHousePrice(customArray) {
+    return filtrate(customArray, housingPriceFiltering);
+  };
+
+  function filtrateRoomNumber(customArray) {
+    return filtrate(customArray, roomNumberFiltering);
+  };
+
+  function filtrateGuestNumber(customArray) {
+    return filtrate(customArray, guestNumberFiltering);
+  };
+
+  function filtrateFeature(customArray) {
+    var checkedData = [];
+    for (var k = 0; k < featureContainer.childElementCount; k++) {
+      if (featureContainer.children[k].checked) {
+        checkedData.push(featureContainer.children[k].value);
+      }
+    }
+    var filteredData = customArray.filter(function (item) {
+      return item.offer.features.some(function (element) {
+        return checkedData.includes(element);
+      });
+    });
+    return filteredData.slice(0, window.data.TICKETS_NUMBER);
+  };
+
   return {
     housingType: housingType,
     housingPrice: housingPrice,
     roomNumber: roomNumber,
     guestNumber: guestNumber,
     feature: featureContainer,
-    filtrateHouseType: function (customArray) {
-      return filtrate(customArray, housingTypeFiltering);
-    },
-    filtrateHousePrice: function (customArray) {
-      return filtrate(customArray, housingPriceFiltering);
-    },
-    filtrateRoomNumber: function (customArray) {
-      return filtrate(customArray, roomNumberFiltering);
-    },
-    filtrateGuestNumber: function (customArray) {
-      return filtrate(customArray, guestNumberFiltering);
-    },
-    filtrateFeature: function (customArray) {
-      var checkedData = [];
-      for (var k = 0; k < featureContainer.childElementCount; k++) {
-        if (featureContainer.children[k].checked) {
-          checkedData.push(featureContainer.children[k].value);
-        }
-      }
-      var filteredData = customArray.filter(function (item) {
-        return item.offer.features.some(function (element) {
-          return checkedData.includes(element);
-        });
+    onFilterChange: function () {
+      var arrayOfFunctions = [
+        filtrateHouseType,
+        filtrateHousePrice,
+        filtrateRoomNumber,
+        filtrateGuestNumber,
+        filtrateFeature,
+        window.pin.showFiteredArray
+      ];
+      arrayOfFunctions.forEach(function (item) {
+        item(window.data.tickets);
       });
-      return filteredData.slice(0, window.data.TICKETS_NUMBER);
-    }
+    },
+    filteredData: filteredPins,
   };
 })();

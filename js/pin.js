@@ -5,7 +5,6 @@ window.pin = (function () {
   var pinWidth = 40;
   var pinHeight = 40;
   var startMap = false;
-  var filteredPins = window.data.tickets;
   var map = document.querySelector('.map');
   var mapPin = document.querySelector('.map__pins');
   var fragment = document.createDocumentFragment();
@@ -27,12 +26,12 @@ window.pin = (function () {
     }
   }
 
-  function showFiteredArray(customArray) {
-    removePin(mapPin);
-    [].forEach.call(customArray, addPinToFragment);
-    mapPin.appendChild(fragment);
-    window.pin.filteredData = filteredPins.slice();
-  }
+//  function showFiteredArray(customArray) {
+//    removePin(mapPin);
+//    [].forEach.call(customArray, addPinToFragment);
+//    mapPin.appendChild(fragment);
+//    window.pin.filteredData = filteredPins.slice();
+//  }
 
   return {
     onMainPinMouseUp: function () {
@@ -63,39 +62,10 @@ window.pin = (function () {
     },
     map: map,
     mapMarker: mapPin,
-//    onHousingTypeChange: function () {
-//      filteredPins = window.filtering.filtrateHouseType(window.data.tickets);
-//      showFiteredArray(filteredPins);
-//    },
-//    onHousingPriceChange: function () {
-//      filteredPins = window.filtering.filtrateHousePrice(window.data.tickets);
-//      showFiteredArray(filteredPins);
-//    },
-//    onRoomNumberChange: function () {
-//      filteredPins = window.filtering.filtrateRoomNumber(window.data.tickets);
-//      showFiteredArray(filteredPins);
-//    },
-//    onGuestNumberChange: function () {
-//      filteredPins = window.filtering.filtrateGuestNumber(window.data.tickets);
-//      showFiteredArray(filteredPins);
-//    },
-//    onFeatureChange: function () {
-//      filteredPins = window.filtering.filtrateFeature(window.data.tickets);
-//      showFiteredArray(filteredPins);
-//    },
-    onFilterChange: function () {
-      var arrayOfFunctions = [
-        window.filtering.filtrateHouseType,
-        window.filtering.filtrateHousePrice,
-        window.filtering.filtrateRoomNumber,
-        window.filtering.filtrateGuestNumber,
-        window.filtering.filtrateFeature,
-        showFiteredArray
-      ];
-      arrayOfFunctions.forEach(function (item) {
-        item(filteredPins);
-      });
+    showFiteredArray: function (customArray) {
+      removePin(mapPin);
+      [].forEach.call(customArray, addPinToFragment);
+      mapPin.appendChild(fragment);
     },
-    filteredData: filteredPins,
   };
 })();
