@@ -87,6 +87,15 @@ window.filtering = (function () {
     return filteredData.slice(0, window.data.TICKETS_NUMBER);
   };
 
+  function applyFilter(customArray) {
+    var newArray = customArray.slice();
+    newArray = newArray.filter(housingTypeFiltering).slice();
+    newArray = newArray.filter(housingPriceFiltering).slice();
+    newArray = newArray.filter(roomNumberFiltering).slice();
+    newArray = newArray.filter(guestNumberFiltering).slice();
+    return newArray;
+  }
+
   return {
     housingType: housingType,
     housingPrice: housingPrice,
@@ -94,17 +103,19 @@ window.filtering = (function () {
     guestNumber: guestNumber,
     feature: featureContainer,
     onFilterChange: function () {
-      var arrayOfFunctions = [
-        filtrateHouseType,
-        filtrateHousePrice,
-        filtrateRoomNumber,
-        filtrateGuestNumber,
-        filtrateFeature,
-        window.pin.showFiteredArray
-      ];
-      arrayOfFunctions.forEach(function (item) {
-        item(window.data.tickets);
-      });
+//      var arrayOfFunctions = [
+//        filtrateHouseType,
+//        filtrateHousePrice,
+//        filtrateRoomNumber,
+//        filtrateGuestNumber,
+//        filtrateFeature,
+//        window.pin.showFiteredArray
+//      ];
+//      arrayOfFunctions.forEach(function (item) {
+//        item(window.data.tickets);
+//      });
+      filteredPins = applyFilter(filteredPins);
+      window.pin.showFiteredArray(filteredPins);
     },
     filteredData: filteredPins,
   };
