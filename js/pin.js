@@ -2,6 +2,7 @@
 
 // Отрисовка маркеров
 window.pin = (function () {
+  var TICKETS_NUMBER = 5;
   var pinWidth = 40;
   var pinHeight = 40;
   var startMap = false;
@@ -26,20 +27,13 @@ window.pin = (function () {
     }
   }
 
-//  function showFiteredArray(customArray) {
-//    removePin(mapPin);
-//    [].forEach.call(customArray, addPinToFragment);
-//    mapPin.appendChild(fragment);
-//    window.pin.filteredData = filteredPins.slice();
-//  }
-
   return {
     onMainPinMouseUp: function () {
       if (startMap === false) {
         map.classList.remove('map--faded');
         window.form.setFormActive();
         window.form.setFieldsActive();
-        var pinArray = window.data.tickets.slice(0, window.data.TICKETS_NUMBER);
+        var pinArray = window.data.tickets.slice(0, TICKETS_NUMBER);
         [].forEach.call(pinArray, addPinToFragment);
         mapPin.appendChild(fragment);
         startMap = true;
@@ -62,9 +56,11 @@ window.pin = (function () {
     },
     map: map,
     mapMarker: mapPin,
+    TICKETS_NUMBER: TICKETS_NUMBER,
     showFiteredArray: function (customArray) {
       removePin(mapPin);
-      [].forEach.call(customArray, addPinToFragment);
+      var newArray = customArray.slice(0, TICKETS_NUMBER);
+      [].forEach.call(newArray, addPinToFragment);
       mapPin.appendChild(fragment);
     },
   };

@@ -2,6 +2,10 @@
 
 // работа с формой
 (function () {
+  var prices = {
+    min: 1E3,
+    max: 1E6
+  };
   var minPrices = {
     bungalo: 0,
     flat: 1000,
@@ -114,8 +118,8 @@
   titleField.setAttribute('required', 'true');
   priceField.setAttribute('required', 'true');
   priceField.setAttribute('min', '0');
-  priceField.setAttribute('max', window.data.getMaxPrice());
-  priceField.setAttribute('value', window.data.getMinPrice());
+  priceField.setAttribute('max', prices.max);
+  priceField.setAttribute('value', prices.min);
   capacity.value = roomNumber.value;
 
   titleField.addEventListener('invalid', onTitleFieldInvalid);
