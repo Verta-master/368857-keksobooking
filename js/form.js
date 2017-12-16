@@ -152,10 +152,13 @@
   noticeForm.addEventListener('submit', onSuccessSubmit);
 
   window.form = {
-    setFormDisabled: function () {
+    setInitialState: function (x, y, shift) {
       if (noticeForm.classList.contains('notice__form--disabled') === false) {
         noticeForm.classList.add('notice__form--disabled');
       }
+      formFields.forEach(setDisabled);
+      resetForm();
+      window.form.address.value = 'x: ' + x + ', y: ' + window.shift.getMainPinY(y, shift);
     },
     setFormActive: function () {
       if (noticeForm.classList.contains('notice__form--disabled') === true) {
@@ -165,11 +168,6 @@
     setFieldsActive: function () {
       formFields.forEach(removeDisabled);
     },
-    setFieldsDisabled: function () {
-      formFields.forEach(setDisabled);
-    },
     address: addressField,
-    noticeForm: noticeForm,
-    reset: resetForm,
   };
 })();

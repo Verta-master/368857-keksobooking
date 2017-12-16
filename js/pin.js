@@ -28,16 +28,18 @@ window.pin = (function () {
   }
 
   return {
-    onMainPinMouseUp: function () {
-      if (startMap === false) {
-        map.classList.remove('map--faded');
-        window.form.setFormActive();
-        window.form.setFieldsActive();
-        var pinArray = window.data.tickets.slice(0, TICKETS_NUMBER);
-        [].forEach.call(pinArray, addPinToFragment);
-        mapPin.appendChild(fragment);
-        startMap = true;
+    activateMainPin: function (mainPinNode, pinData) {
+      function onMainPinMouseUp() {
+        if (startMap === false) {
+          map.classList.remove('map--faded');
+          window.form.setFormActive();
+          window.form.setFieldsActive();
+          [].forEach.call(pinData.slice(0, TICKETS_NUMBER), addPinToFragment);
+          mapPin.appendChild(fragment);
+          startMap = true;
+        }
       }
+      mainPinNode.addEventListener('mouseup', onMainPinMouseUp);
     },
     activatedPin: false,
     isActive: function (pin) {
@@ -56,11 +58,10 @@ window.pin = (function () {
     },
     map: map,
     mapMarker: mapPin,
-    TICKETS_NUMBER: TICKETS_NUMBER,
     showFiteredArray: function (customArray) {
       removePin(mapPin);
-      var newArray = customArray.slice(0, TICKETS_NUMBER);
-      [].forEach.call(newArray, addPinToFragment);
+      var filteredPins = customArray.slice(0, TICKETS_NUMBER);
+      [].forEach.call(filteredPins, addPinToFragment);
       mapPin.appendChild(fragment);
     },
   };

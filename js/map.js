@@ -16,12 +16,11 @@
   var mainPin = document.querySelector('.map__pin--main');
 
   function onSuccessLoad(response) {
-    window.data.tickets = response.slice();
     window.card.render(window.pin.map);
-    mainPin.addEventListener('mouseup', window.pin.onMainPinMouseUp);
+    window.pin.activateMainPin(mainPin, response);
     window.pin.mapMarker.addEventListener('click', onPinClick);
     window.card.setHandlers();
-    window.filtering.startFilters(window.data.tickets);
+    window.debounce(window.filtering.startFilters(response));
   }
 
   window.backend.load(onSuccessLoad, window.backend.errorHandler);
@@ -32,18 +31,14 @@
       var pinNumber = parseInt(targetPin.getAttribute('data-number'), 10);
       window.pin.isActive(targetPin);
       targetPin.classList.add('map__pin--active');
-      window.showCard(window.data.tickets[pinNumber]);
-      // window.showCard(window.filtering.result[pinNumber]);
+      window.showCard(window.filtering.loadedData[pinNumber]);
     }
   }
 
   // Начальное состояние
   window.pin.fadeMap();
   window.card.hide();
-  window.form.setFormDisabled();
-  window.form.setFieldsDisabled();
-  window.form.reset();
-  window.form.address.value = 'x: ' + mainPin.offsetLeft + ', y: ' + window.shift.getMainPinY(mainPin.offsetTop, mainPinHeight);
+  window.form.setInitialState(mainPin.offsetLeft, mainPin.offsetTop, mainPinHeight);
 
   // Перемещение главного пина
   mainPin.addEventListener('mousedown', function (evt) {

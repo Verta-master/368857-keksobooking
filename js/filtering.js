@@ -50,33 +50,32 @@
       var guestFilter = (advertisement.offer.guests === parseInt(guestNumber.value, 10) || guestNumber.value === 'any') ? 1 : 0;
       return guestFilter;
     },
+
+    function filtrateFeature(advertisement) {
+      var checkedElements = featureContainer.querySelectorAll('input[type="checkbox"]:checked');
+      var selectedFeatures = [].map.call(checkedElements, function (item) {
+        return item.value;
+      });
+
+      return selectedFeatures.every(function (currentFeature) {
+        return advertisement.offer.features.includes(currentFeature);
+      });
+    }
   ];
 
-  function filtrateFeature(customArray) {
-    var checkedData = [];
-    for (var k = 0; k < featureContainer.childElementCount; k++) {
-      if (featureContainer.children[k].checked) {
-        checkedData.push(featureContainer.children[k].value);
-      }
-    }
-    var filteredData = customArray.filter(function (item) {
-      return item.offer.features.some(function (element) {
-        return checkedData.includes(element);
-      });
-    });
-    return filteredData;
-  }
-
   window.filtering = {
+    loadedData: [],
     startFilters: function (loadedData) {
+      this.loadedData = loadedData.slice();
+
       function onFilterChange() {
         var result = loadedData.slice();
 
         filters.forEach(function (currentFilter) {
           result = result.filter(currentFilter);
         });
-        // result = filtrateFeature(result);
         window.pin.showFiteredArray(result);
+        window.filtering.loadedData = result;
       }
 
       housingType.addEventListener('change', onFilterChange);
@@ -87,4 +86,3 @@
     }
   };
 })();
-
