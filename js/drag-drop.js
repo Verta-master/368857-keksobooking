@@ -22,8 +22,14 @@
     evt.stopPropagation();
     evt.preventDefault();
     evt.dataTransfer.dropEffect = 'copy';
-    var files = evt.dataTransfer.files;
-    avatarImage.src = 'img/' + files[0].name;
+    var file = evt.dataTransfer.files[0];
+    var reader = new FileReader();
+
+    reader.addEventListener('load', function () {
+      avatarImage.src = reader.result;
+    });
+
+    reader.readAsDataURL(file);
   });
 
   imageDropZone.addEventListener('dragenter', function (evt) {
@@ -34,17 +40,32 @@
   imageDropZone.addEventListener('dragover', function (evt) {
     evt.stopPropagation();
     evt.preventDefault();
+    return false;
   });
 
   imageDropZone.addEventListener('drop', function (evt) {
     evt.stopPropagation();
     evt.preventDefault();
     evt.dataTransfer.dropEffect = 'copy';
-    var files = evt.dataTransfer.files;
-    for (var i = 0; i < files.length; i++) {
-      var img = document.createElement('img');
-      img.scr = 'img/' + files[i].name;
-      uploadImageArea.insertAdjacentHTML('beforeend', img);
+    var file = evt.dataTransfer.files[0];
+    var reader = new FileReader();
+
+    reader.addEventListener('load', function () {
+      var img = document.createElement('IMG');
+      img.width = '100';
+      uploadImageArea.appendChild(img);
+      img.src = reader.result;
+      img.setAttribute('draggable', true);
+    });
+
+    reader.readAsDataURL(file);
+  });
+
+  imageDropZone.addEventListener('dragstart', function (evt) {
+    if (evt.target.tagName.toLowerCase() === 'img') {
+      // var draggedItem = evt.target;
+      evt.dataTransfer.setData('text/plain', evt.target.alt);
     }
   });
+
 })();
