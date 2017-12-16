@@ -27,6 +27,11 @@ window.pin = (function () {
     }
   }
 
+  function drawPinsOnMap() {
+    removePin(mapPin);
+    mapPin.appendChild(fragment);
+  }
+
   return {
     activateMainPin: function (mainPinNode, pinData) {
       function onMainPinMouseUp() {
@@ -59,10 +64,9 @@ window.pin = (function () {
     map: map,
     mapMarker: mapPin,
     showFiteredArray: function (customArray) {
-      removePin(mapPin);
       var filteredPins = customArray.slice(0, TICKETS_NUMBER);
       [].forEach.call(filteredPins, addPinToFragment);
-      mapPin.appendChild(fragment);
+      window.debounce(drawPinsOnMap);
     },
   };
 })();

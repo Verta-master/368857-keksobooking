@@ -56,6 +56,9 @@ window.card = (function () {
     hide: function () {
       card.classList.add('hidden');
     },
+    show: function () {
+      card.classList.remove('hidden');
+    },
     setHandlers: function () {
       cardCloser.addEventListener('click', onCardCloserClick);
       document.addEventListener('keydown', onCardKeydown);

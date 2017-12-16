@@ -20,7 +20,7 @@
     window.pin.activateMainPin(mainPin, response);
     window.pin.mapMarker.addEventListener('click', onPinClick);
     window.card.setHandlers();
-    window.debounce(window.filtering.startFilters(response));
+    window.filtering.startFilters(response);
   }
 
   window.backend.load(onSuccessLoad, window.backend.errorHandler);
@@ -31,7 +31,8 @@
       var pinNumber = parseInt(targetPin.getAttribute('data-number'), 10);
       window.pin.isActive(targetPin);
       targetPin.classList.add('map__pin--active');
-      window.showCard(window.filtering.loadedData[pinNumber]);
+      window.card.setData(window.filtering.loadedData[pinNumber]);
+      window.card.show();
     }
   }
 
