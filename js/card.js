@@ -1,7 +1,7 @@
 'use strict';
 
 // Заполнение карточки
-window.card = (function () {
+(function () {
   var ESC_KEYCODE = 27;
 
   var offerTypes = {
@@ -35,7 +35,7 @@ window.card = (function () {
     }
   }
 
-  return {
+  window.card = {
     setData: function (newCard) {
       card.querySelector('h3').textContent = newCard.offer.title;
       card.querySelector('small').textContent = newCard.offer.address;

@@ -1,7 +1,7 @@
 'use strict';
 
 // Отрисовка маркеров
-window.pin = (function () {
+(function () {
   var TICKETS_NUMBER = 5;
   var pinWidth = 40;
   var pinHeight = 40;
@@ -32,12 +32,12 @@ window.pin = (function () {
     mapPin.appendChild(fragment);
   }
 
-  return {
+  window.pin = {
     activateMainPin: function (mainPinNode, pinData) {
       function onMainPinMouseUp() {
         if (startMap === false) {
           map.classList.remove('map--faded');
-          window.form.setFormActive();
+          window.form.setActive();
           window.form.setFieldsActive();
           [].forEach.call(pinData.slice(0, TICKETS_NUMBER), addPinToFragment);
           mapPin.appendChild(fragment);

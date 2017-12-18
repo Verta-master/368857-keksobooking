@@ -137,6 +137,8 @@
     timeOutField.value = initValues.timeout;
     roomNumber.value = initValues.room;
     capacity.value = initValues.capacity;
+    capacity[0].removeAttribute('selected');
+    capacity[2].setAttribute('selected', true);
     for (var k = 0; k < features.length; k++) {
       features[k].checked = false;
     }
@@ -158,9 +160,9 @@
       }
       formFields.forEach(setDisabled);
       resetForm();
-      window.form.address.value = 'x: ' + x + ', y: ' + window.shift.getMainPinY(y, shift);
+      addressField.value = 'x: ' + x + ', y: ' + window.shift.getMainPinY(y, shift);
     },
-    setFormActive: function () {
+    setActive: function () {
       if (noticeForm.classList.contains('notice__form--disabled') === true) {
         noticeForm.classList.remove('notice__form--disabled');
       }
