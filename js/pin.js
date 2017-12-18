@@ -16,7 +16,7 @@
     newPin.querySelector('img').width = pinWidth;
     newPin.querySelector('img').height = pinHeight;
     newPin.style.left = ticket.location.x + 'px';
-    newPin.style.top = window.shift.getPinShiftY(ticket.location.y, pinHeight) + 'px';
+    newPin.style.top = window.shift.getPinY(ticket.location.y, pinHeight) + 'px';
     newPin.setAttribute('data-number', String(ticketNumber));
     fragment.appendChild(newPin);
   }

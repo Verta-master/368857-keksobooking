@@ -43,7 +43,7 @@
   }
 
   function removeDisabled(item) {
-    item.removeAttribute('disabled', 'disabled');
+    item.removeAttribute('disabled');
   }
 
   function setDisabled(item) {
@@ -137,9 +137,12 @@
     timeOutField.value = initValues.timeout;
     roomNumber.value = initValues.room;
     capacity.value = initValues.capacity;
-    capacity[0].removeAttribute('selected');
-    capacity[2].setAttribute('selected', true);
-    for (var k = 0; k < features.length; k++) {
+    for (var k = 0; k < capacity.length; k++) {
+      if (k !== 2) {
+        capacity[k].disabled = true;
+      }
+    }
+    for (k = 0; k < features.length; k++) {
       features[k].checked = false;
     }
     description.value = '';
