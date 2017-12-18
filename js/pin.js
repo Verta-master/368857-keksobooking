@@ -5,7 +5,7 @@
   var TICKETS_NUMBER = 5;
   var pinWidth = 40;
   var pinHeight = 40;
-  var startMap = false;
+  var mapView = false;
   var map = document.querySelector('.map');
   var mapPin = document.querySelector('.map__pins');
   var fragment = document.createDocumentFragment();
@@ -35,13 +35,13 @@
   window.pin = {
     activateMainPin: function (mainPinNode, pinData) {
       function onMainPinMouseUp() {
-        if (startMap === false) {
+        if (mapView === false) {
           map.classList.remove('map--faded');
           window.form.setActive();
           window.form.setFieldsActive();
           [].forEach.call(pinData.slice(0, TICKETS_NUMBER), addPinToFragment);
           mapPin.appendChild(fragment);
-          startMap = true;
+          mapView = true;
         }
       }
       mainPinNode.addEventListener('mouseup', onMainPinMouseUp);

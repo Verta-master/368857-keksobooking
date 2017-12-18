@@ -1,14 +1,18 @@
 'use strict';
 
 (function () {
-  var SERVER_URL = 'https://1510.dump.academy/keksobooking';
+  var Server = {
+    URL: 'https://1510.dump.academy/keksobooking',
+    STATUS_OK: 200,
+    TIMEOUT: 10000,
+  };
 
   function setup(onLoad, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
-      if (xhr.status === 200) {
+      if (xhr.status === Server.STATUS_OK) {
         onLoad(xhr.response);
       } else {
         onError(xhr.response);
@@ -21,7 +25,7 @@
       onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
 
-    xhr.timeout = 10000;
+    xhr.timeout = Server.TIMEOUT;
     return xhr;
   }
 
@@ -29,13 +33,13 @@
     save: function (data, onLoad, onError) {
       var xhr = setup(onLoad, onError);
 
-      xhr.open('POST', SERVER_URL);
+      xhr.open('POST', Server.URL);
       xhr.send(data);
     },
     load: function (onLoad, onError) {
       var xhr = setup(onLoad, onError);
 
-      xhr.open('GET', SERVER_URL + '/data');
+      xhr.open('GET', Server.URL + '/data');
       xhr.send();
     },
     errorHandler: function (errorMessage) {

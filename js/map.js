@@ -1,18 +1,18 @@
 'use strict';
 
 (function () {
-  var limits = {
-    x: {
-      min: 300,
-      max: 900
+  var Limit = {
+    X: {
+      MIN: 300,
+      MAX: 900
     },
-    y: {
-      min: 100,
-      max: 500
+    Y: {
+      MIN: 100,
+      MAX: 500
     }
   };
-  var mainPinHeight = 65;
-  var pinShift = window.shift.halfPin(mainPinHeight);
+  var MAIN_PIN_HEIGHT = 65;
+  var pinShift = window.shift.halfPin(MAIN_PIN_HEIGHT);
   var mainPin = document.querySelector('.map__pin--main');
 
   function onSuccessLoad(response) {
@@ -27,7 +27,7 @@
 
   function onPinClick(evt) {
     var targetPin = (evt.target.classList.contains('map__pin')) ? evt.target : evt.target.parentNode;
-    if (targetPin.classList.contains('map__pin--main') === false && targetPin.classList.contains('map__pin') === true) {
+    if (targetPin.classList.contains('map__pin--main') === false && targetPin.classList.contains('map__pin')) {
       var pinNumber = parseInt(targetPin.getAttribute('data-number'), 10);
       window.pin.isActive(targetPin);
       targetPin.classList.add('map__pin--active');
@@ -39,7 +39,7 @@
   // Начальное состояние
   window.pin.fadeMap();
   window.card.hide();
-  window.form.setInitialState(mainPin.offsetLeft, mainPin.offsetTop, mainPinHeight);
+  window.form.setInitialState(mainPin.offsetLeft, mainPin.offsetTop, MAIN_PIN_HEIGHT);
 
   // Перемещение главного пина
   mainPin.addEventListener('mousedown', function (evt) {
@@ -52,10 +52,6 @@
       x: evt.clientX,
       y: evt.clientY
     };
-
-    function setAddress(x, y) {
-      window.form.address.value = 'x: ' + x + ', y: ' + window.shift.getMainPinY(y, mainPinHeight);
-    }
 
     function onMouseMove(moveEvt) {
       moveEvt.preventDefault();
@@ -72,17 +68,17 @@
 
       finalCoords.x = mainPin.offsetLeft - shift.x;
       var newY = mainPin.offsetTop - shift.y;
-      if (newY < (limits.y.min - pinShift)) {
-        finalCoords.y = limits.y.min - pinShift;
-      } else if (newY > (limits.y.max - pinShift)) {
-        finalCoords.y = limits.y.max - pinShift;
+      if (newY < (Limit.Y.MIN - pinShift)) {
+        finalCoords.y = Limit.Y.MIN - pinShift;
+      } else if (newY > (Limit.Y.MAX - pinShift)) {
+        finalCoords.y = Limit.Y.MAX - pinShift;
       } else {
         finalCoords.y = newY;
       }
 
       mainPin.style.top = finalCoords.y + 'px';
       mainPin.style.left = finalCoords.x + 'px';
-      setAddress(finalCoords.x, finalCoords.y);
+      window.form.setAddress(finalCoords.x, finalCoords.y, MAIN_PIN_HEIGHT);
     }
 
     function onMouseUp(upEvt) {
