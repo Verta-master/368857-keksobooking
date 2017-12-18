@@ -37,6 +37,7 @@
   var features = noticeForm.querySelectorAll('input[type="checkbox"]');
   var description = noticeForm.querySelector('#description');
   var imageLoad = noticeForm.querySelector('#images');
+  var uploadZone = noticeForm.querySelector('.form__photo-container');
 
   function setFieldBorder(field, color) {
     field.style.borderColor = color;
@@ -147,6 +148,9 @@
     }
     description.value = '';
     imageLoad.value = '';
+    while (uploadZone.childElementCount > 1) {
+      uploadZone.removeChild(uploadZone.lastChild);
+    }
   }
 
   function onSuccessSubmit(evt) {
