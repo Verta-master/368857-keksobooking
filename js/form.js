@@ -24,6 +24,10 @@
     ROOM: 1,
     CAPACITY: 1
   };
+  var Room = {
+    HOUSE: '3',
+    PALACE: '100'
+  };
   var formFields = document.querySelectorAll('fieldset');
   var noticeForm = document.querySelector('.notice__form');
   var addressField = noticeForm.querySelector('#address');
@@ -100,13 +104,20 @@
   }
 
   function onRoomNumberChange() {
-    capacity.value = (roomNumber.value !== '100') ? roomNumber.value : 0;
-    var index = capacity.length - capacity.value - 1;
-    for (var i = 0; i < capacity.length; i++) {
-      if (i === index) {
-        capacity.options[i].removeAttribute('disabled', 'disabled');
-      } else {
-        capacity.options[i].setAttribute('disabled', 'disabled');
+    capacity.value = (roomNumber.value !== Room.PALACE) ? roomNumber.value : 0;
+    if (roomNumber.value === Room.HOUSE) {
+      for (var i = 0; i < capacity.length - 1; i++) {
+        capacity.options[i].removeAttribute('disabled');
+      }
+      capacity.options[capacity.length - 1].setAttribute('disabled', 'disabled');
+    } else {
+      var index = capacity.length - capacity.value - 1;
+      for (i = 0; i < capacity.length; i++) {
+        if (i === index) {
+          capacity.options[i].removeAttribute('disabled');
+        } else {
+          capacity.options[i].setAttribute('disabled', 'disabled');
+        }
       }
     }
   }

@@ -43,9 +43,10 @@
       xhr.send();
     },
     errorHandler: function (errorMessage) {
-      var message = document.querySelector('.error-message');
+      var message = document.createElement('div');
+      message.style = 'z-index: 100; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 0 20px; text-align: center; font-size: 30px; color: red; border: 1px solid red; background-color: #ffffff';
       message.textContent = errorMessage;
-      message.classList.remove('hidden');
-    },
+      document.body.insertAdjacentElement('afterbegin', message);
+    }
   };
 })();
