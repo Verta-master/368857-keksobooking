@@ -11,7 +11,7 @@
     MAX: 100
   };
   var InitialValue = {
-    TYPE: 'flat',
+    TYPE: 'bungalo',
     PRICE: 1000,
     TIMEIN: '12:00',
     TIMEOUT: '12:00',
@@ -93,15 +93,15 @@
   }
 
   function onTimeInFieldChange(evt) {
-    window.syncronizeFields.syncValues(timeOutField, evt.target.value, syncTime);
+    window.syncronizeFields(timeOutField, evt.target.value, syncTime);
   }
 
   function onTimeOutFieldChange(evt) {
-    window.syncronizeFields.syncValues(timeInField, evt.target.value, syncTime);
+    window.syncronizeFields(timeInField, evt.target.value, syncTime);
   }
 
   function onHouseTypeChange(evt) {
-    window.syncronizeFields.syncValues(priceField, minPrices[evt.target.value], syncType);
+    window.syncronizeFields(priceField, minPrices[evt.target.value], syncType);
   }
 
   function onRoomNumberChange() {
@@ -180,19 +180,12 @@
 
   window.form = {
     setInitialState: function (x, y, shift) {
-      if (noticeForm.classList.contains('notice__form--disabled') === false) {
-        noticeForm.classList.add('notice__form--disabled');
-      }
       [].forEach.call(formFields, setDisabled);
       resetForm();
       this.setAddress(x, y, shift);
     },
     setActive: function () {
-      if (noticeForm.classList.contains('notice__form--disabled')) {
-        noticeForm.classList.remove('notice__form--disabled');
-      }
-    },
-    setFieldsActive: function () {
+      noticeForm.classList.remove('notice__form--disabled');
       [].forEach.call(formFields, removeDisabled);
     },
     setAddress: function (x, y, shift) {

@@ -18,25 +18,19 @@
     },
 
     function housingPriceFiltering(advertisement) {
-      var priceFilter = 0;
+      var priceFilter;
       switch (housingPrice.value) {
         case 'any':
           priceFilter = 1;
           break;
         case 'low':
-          if (advertisement.offer.price < prices.low) {
-            priceFilter = 1;
-          }
+          priceFilter = (advertisement.offer.price < prices.low) ? 1 : 0;
           break;
         case 'middle':
-          if (advertisement.offer.price > prices.low && advertisement.offer.price < prices.middle) {
-            priceFilter = 1;
-          }
+          priceFilter = (advertisement.offer.price > prices.low && advertisement.offer.price < prices.middle) ? 1 : 0;
           break;
         case 'high':
-          if (advertisement.offer.price > prices.middle) {
-            priceFilter = 1;
-          }
+          priceFilter = (advertisement.offer.price > prices.middle) ? 1 : 0;
       }
       return priceFilter;
     },
@@ -65,7 +59,7 @@
 
   window.filtering = {
     loadedData: [],
-    startFilters: function (loadedData) {
+    start: function (loadedData) {
       this.loadedData = loadedData.slice();
 
       function onFilterChange() {

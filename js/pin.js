@@ -33,12 +33,11 @@
   }
 
   window.pin = {
-    activateMainPin: function (mainPinNode, pinData) {
+    activate: function (mainPinNode, pinData) {
       function onMainPinMouseUp() {
         if (mapView === false) {
           map.classList.remove('map--faded');
           window.form.setActive();
-          window.form.setFieldsActive();
           [].forEach.call(pinData.slice(0, TICKETS_NUMBER), addPinToFragment);
           mapPin.appendChild(fragment);
           mapView = true;

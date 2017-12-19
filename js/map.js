@@ -17,10 +17,10 @@
 
   function onSuccessLoad(response) {
     window.card.render(window.pin.map);
-    window.pin.activateMainPin(mainPin, response);
+    window.pin.activate(mainPin, response);
     window.pin.mapMarker.addEventListener('click', onPinClick);
     window.card.setHandlers();
-    window.filtering.startFilters(response);
+    window.filtering.start(response);
   }
 
   window.backend.load(onSuccessLoad, window.backend.errorHandler);
