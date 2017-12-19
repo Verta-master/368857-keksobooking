@@ -25,6 +25,7 @@
     CAPACITY: 1
   };
   var Room = {
+    FLAT: '2',
     HOUSE: '3',
     PALACE: '100'
   };
@@ -109,6 +110,12 @@
       for (var i = 0; i < capacity.length - 1; i++) {
         capacity.options[i].removeAttribute('disabled');
       }
+      capacity.options[capacity.length - 1].setAttribute('disabled', 'disabled');
+    } else if (roomNumber.value === Room.FLAT) {
+      for (i = 1; i < capacity.length - 1; i++) {
+        capacity.options[i].removeAttribute('disabled');
+      }
+      capacity.options[0].setAttribute('disabled', 'disabled');
       capacity.options[capacity.length - 1].setAttribute('disabled', 'disabled');
     } else {
       var index = capacity.length - capacity.value - 1;

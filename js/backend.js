@@ -44,7 +44,16 @@
     },
     errorHandler: function (errorMessage) {
       var message = document.createElement('div');
-      message.style = 'z-index: 100; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 0 20px; text-align: center; font-size: 30px; color: red; border: 1px solid red; background-color: #ffffff';
+      message.style.zIndex = '100';
+      message.style.position = 'absolute';
+      message.style.top = '50%';
+      message.style.left = '50%';
+      message.style.transform = 'translate(-50%, -50%)';
+      message.style.padding = '10px';
+      message.fontSize = '30px';
+      message.style.color = 'red';
+      message.style.border = '1px solid red';
+      message.style.backgroundColor = '#ffffff';
       message.textContent = errorMessage;
       document.body.insertAdjacentElement('afterbegin', message);
     }
