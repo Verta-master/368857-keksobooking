@@ -66,7 +66,7 @@
       evt.target.setCustomValidity('Обязательное поле');
     } else {
       evt.target.setCustomValidity('');
-      setFieldBorder(evt.target, 'rgba(255, 255, 255, 0)');
+      setFieldBorder(evt.target, '#d9d9d3');
     }
   }
 
@@ -80,7 +80,7 @@
       evt.target.setCustomValidity('Обязательное поле');
     } else {
       evt.target.setCustomValidity('');
-      setFieldBorder(evt.target, 'rgba(255, 255, 255, 0)');
+      setFieldBorder(evt.target, '#d9d9d3');
     }
   }
 
