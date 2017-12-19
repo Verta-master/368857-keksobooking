@@ -6,12 +6,6 @@
     MIN: 1E3,
     MAX: 1E6
   };
-  var MinPrice = {
-    BUNGALO: 0,
-    FLAT: 1000,
-    HOUSE: 5000,
-    PALACE: 10000
-  };
   var TitleLength = {
     MIN: 30,
     MAX: 100
@@ -28,6 +22,12 @@
     FLAT: '2',
     HOUSE: '3',
     PALACE: '100'
+  };
+  var minPrices = {
+    bungalo: 0,
+    flat: 1000,
+    house: 5000,
+    palace: 10000
   };
   var formFields = document.querySelectorAll('fieldset');
   var noticeForm = document.querySelector('.notice__form');
@@ -101,7 +101,7 @@
   }
 
   function onHouseTypeChange(evt) {
-    window.syncronizeFields.syncValues(priceField, MinPrice[evt.target.value], syncType);
+    window.syncronizeFields.syncValues(priceField, minPrices[evt.target.value], syncType);
   }
 
   function onRoomNumberChange() {
