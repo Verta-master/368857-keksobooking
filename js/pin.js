@@ -3,23 +3,8 @@
 // Отрисовка маркеров
 (function () {
   var TICKETS_NUMBER = 5;
-  var pinWidth = 40;
-  var pinHeight = 40;
   var mapView = false;
-  var map = document.querySelector('.map');
   var mapPin = document.querySelector('.map__pins');
-  var fragment = document.createDocumentFragment();
-
-  function addPinToFragment(ticket, ticketNumber) {
-    var newPin = document.querySelector('template').content.querySelector('.map__pin').cloneNode(true);
-    newPin.querySelector('img').src = ticket.author.avatar;
-    newPin.querySelector('img').width = pinWidth;
-    newPin.querySelector('img').height = pinHeight;
-    newPin.style.left = ticket.location.x + 'px';
-    newPin.style.top = window.shift.getPinY(ticket.location.y, pinHeight) + 'px';
-    newPin.setAttribute('data-number', String(ticketNumber));
-    fragment.appendChild(newPin);
-  }
 
   function removePin(parentNode) {
     while (parentNode.childElementCount > 2) {
@@ -33,15 +18,10 @@
   }
 
   window.pin = {
-    activateMainPin: function (mainPinNode, pinData) {
+    activateMainPin: function (mainPinNode, successLoadCb) {
       function onMainPinMouseUp() {
         if (mapView === false) {
-          map.classList.remove('map--faded');
-          window.form.setActive();
-          window.form.setFieldsActive();
-          [].forEach.call(pinData.slice(0, TICKETS_NUMBER), addPinToFragment);
-          mapPin.appendChild(fragment);
-          mapView = true;
+          window.backend.load(successLoadCb, window.backend.errorHandler);
         }
       }
       mainPinNode.addEventListener('mouseup', onMainPinMouseUp);
@@ -56,17 +36,12 @@
       }
       this.activatedPin = pin;
     },
-    fadeMap: function () {
-      if (map.classList.contains('map--faded') === false) {
-        map.classList.add('map--faded');
-      }
-    },
-    map: map,
     mapMarker: mapPin,
     showFiteredArray: function (customArray) {
       var filteredPins = customArray.slice(0, TICKETS_NUMBER);
       [].forEach.call(filteredPins, addPinToFragment);
       window.debounce(drawPinsOnMap);
     },
+    TICKETS_NUMBER: TICKETS_NUMBER,
   };
 })();
