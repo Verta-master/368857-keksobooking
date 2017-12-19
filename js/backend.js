@@ -1,14 +1,18 @@
 'use strict';
 
 (function () {
-  var SERVER_URL = 'https://1510.dump.academy/keksobooking';
+  var Server = {
+    URL: 'https://1510.dump.academy/keksobooking',
+    STATUS_OK: 200,
+    TIMEOUT: 10000,
+  };
 
   function setup(onLoad, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
-      if (xhr.status === 200) {
+      if (xhr.status === Server.STATUS_OK) {
         onLoad(xhr.response);
       } else {
         onError(xhr.response);
@@ -21,7 +25,7 @@
       onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
 
-    xhr.timeout = 10000;
+    xhr.timeout = Server.TIMEOUT;
     return xhr;
   }
 
@@ -29,18 +33,27 @@
     save: function (data, onLoad, onError) {
       var xhr = setup(onLoad, onError);
 
-      xhr.open('POST', SERVER_URL);
+      xhr.open('POST', Server.URL);
       xhr.send(data);
     },
     load: function (onLoad, onError) {
       var xhr = setup(onLoad, onError);
 
-      xhr.open('GET', SERVER_URL + '/data');
+      xhr.open('GET', Server.URL + '/data');
       xhr.send();
     },
     errorHandler: function (errorMessage) {
       var message = document.createElement('div');
-      message.style = 'z-index: 100; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; font-size: 30px; color: red; border: 1px solid red; background-color: #ffffff';
+      message.style.zIndex = '100';
+      message.style.position = 'absolute';
+      message.style.top = '50%';
+      message.style.left = '50%';
+      message.style.transform = 'translate(-50%, -50%)';
+      message.style.padding = '10px';
+      message.fontSize = '30px';
+      message.style.color = 'red';
+      message.style.border = '1px solid red';
+      message.style.backgroundColor = '#ffffff';
       message.textContent = errorMessage;
       document.body.insertAdjacentElement('afterbegin', message);
     }

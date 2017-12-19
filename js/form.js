@@ -2,23 +2,32 @@
 
 // работа с формой
 (function () {
+  var Price = {
+    MIN: 1E3,
+    MAX: 1E6
+  };
+  var TitleLength = {
+    MIN: 30,
+    MAX: 100
+  };
+  var InitialValue = {
+    TYPE: 'bungalo',
+    PRICE: 1000,
+    TIMEIN: '12:00',
+    TIMEOUT: '12:00',
+    ROOM: 1,
+    CAPACITY: 1
+  };
+  var Room = {
+    FLAT: '2',
+    HOUSE: '3',
+    PALACE: '100'
+  };
   var minPrices = {
     bungalo: 0,
     flat: 1000,
     house: 5000,
     palace: 10000
-  };
-  var titleLengths = {
-    min: 30,
-    max: 100
-  };
-  var initValues = {
-    type: 'flat',
-    price: 1000,
-    timein: '12:00',
-    timeout: '12:00',
-    room: 1,
-    capacity: 1
   };
   var formFields = document.querySelectorAll('fieldset');
   var noticeForm = document.querySelector('.notice__form');
@@ -33,13 +42,14 @@
   var features = noticeForm.querySelectorAll('input[type="checkbox"]');
   var description = noticeForm.querySelector('#description');
   var imageLoad = noticeForm.querySelector('#images');
+  var uploadZone = noticeForm.querySelector('.form__photo-container');
 
   function setFieldBorder(field, color) {
     field.style.borderColor = color;
   }
 
   function removeDisabled(item) {
-    item.removeAttribute('disabled', 'disabled');
+    item.removeAttribute('disabled');
   }
 
   function setDisabled(item) {
@@ -56,7 +66,7 @@
       evt.target.setCustomValidity('Обязательное поле');
     } else {
       evt.target.setCustomValidity('');
-      setFieldBorder(evt.target, 'transparent');
+      setFieldBorder(evt.target, '#d9d9d3');
     }
   }
 
@@ -70,7 +80,7 @@
       evt.target.setCustomValidity('Обязательное поле');
     } else {
       evt.target.setCustomValidity('');
-      setFieldBorder(evt.target, 'transparent');
+      setFieldBorder(evt.target, '#d9d9d3');
     }
   }
 
@@ -83,25 +93,38 @@
   }
 
   function onTimeInFieldChange(evt) {
-    window.syncronizeFields.syncValues(timeOutField, evt.target.value, syncTime);
+    window.syncronizeFields(timeOutField, evt.target.value, syncTime);
   }
 
   function onTimeOutFieldChange(evt) {
-    window.syncronizeFields.syncValues(timeInField, evt.target.value, syncTime);
+    window.syncronizeFields(timeInField, evt.target.value, syncTime);
   }
 
   function onHouseTypeChange(evt) {
-    window.syncronizeFields.syncValues(priceField, minPrices[evt.target.value], syncType);
+    window.syncronizeFields(priceField, minPrices[evt.target.value], syncType);
   }
 
   function onRoomNumberChange() {
-    capacity.value = (roomNumber.value !== '100') ? roomNumber.value : 0;
-    var index = capacity.length - capacity.value - 1;
-    for (var i = 0; i < capacity.length; i++) {
-      if (i === index) {
-        capacity.options[i].removeAttribute('disabled', 'disabled');
-      } else {
-        capacity.options[i].setAttribute('disabled', 'disabled');
+    capacity.value = (roomNumber.value !== Room.PALACE) ? roomNumber.value : 0;
+    if (roomNumber.value === Room.HOUSE) {
+      for (var i = 0; i < capacity.length - 1; i++) {
+        capacity.options[i].removeAttribute('disabled');
+      }
+      capacity.options[capacity.length - 1].setAttribute('disabled', 'disabled');
+    } else if (roomNumber.value === Room.FLAT) {
+      for (i = 1; i < capacity.length - 1; i++) {
+        capacity.options[i].removeAttribute('disabled');
+      }
+      capacity.options[0].setAttribute('disabled', 'disabled');
+      capacity.options[capacity.length - 1].setAttribute('disabled', 'disabled');
+    } else {
+      var index = capacity.length - capacity.value - 1;
+      for (i = 0; i < capacity.length; i++) {
+        if (i === index) {
+          capacity.options[i].removeAttribute('disabled');
+        } else {
+          capacity.options[i].setAttribute('disabled', 'disabled');
+        }
       }
     }
   }
@@ -109,13 +132,13 @@
   noticeForm.setAttribute('action', 'https://js.dump.academy/keksobooking');
   addressField.setAttribute('required', 'true');
   addressField.setAttribute('readonly', 'true');
-  titleField.setAttribute('minlength', titleLengths.min);
-  titleField.setAttribute('maxlength', titleLengths.max);
+  titleField.setAttribute('minlength', TitleLength.MIN);
+  titleField.setAttribute('maxlength', TitleLength.MAX);
   titleField.setAttribute('required', 'true');
   priceField.setAttribute('required', 'true');
   priceField.setAttribute('min', '0');
-  priceField.setAttribute('max', window.data.getMaxPrice());
-  priceField.setAttribute('value', window.data.getMinPrice());
+  priceField.setAttribute('max', Price.MAX);
+  priceField.setAttribute('value', Price.MIN);
   capacity.value = roomNumber.value;
 
   titleField.addEventListener('invalid', onTitleFieldInvalid);
@@ -127,17 +150,25 @@
 
   function resetForm() {
     titleField.value = '';
-    houseType.value = initValues.type;
-    priceField.value = initValues.price;
-    timeInField.value = initValues.timein;
-    timeOutField.value = initValues.timeout;
-    roomNumber.value = initValues.room;
-    capacity.value = initValues.capacity;
-    for (var k = 0; k < features.length; k++) {
+    houseType.value = InitialValue.TYPE;
+    priceField.value = InitialValue.PRICE;
+    timeInField.value = InitialValue.TIMEIN;
+    timeOutField.value = InitialValue.TIMEOUT;
+    roomNumber.value = InitialValue.ROOM;
+    capacity.value = InitialValue.CAPACITY;
+    for (var k = 0; k < capacity.length; k++) {
+      if (k !== 2) {
+        capacity[k].disabled = true;
+      }
+    }
+    for (k = 0; k < features.length; k++) {
       features[k].checked = false;
     }
     description.value = '';
     imageLoad.value = '';
+    while (uploadZone.childElementCount > 1) {
+      uploadZone.removeChild(uploadZone.lastChild);
+    }
   }
 
   function onSuccessSubmit(evt) {
@@ -148,24 +179,17 @@
   noticeForm.addEventListener('submit', onSuccessSubmit);
 
   window.form = {
-    setFormDisabled: function () {
-      if (noticeForm.classList.contains('notice__form--disabled') === false) {
-        noticeForm.classList.add('notice__form--disabled');
-      }
+    setInitialState: function (x, y, shift) {
+      [].forEach.call(formFields, setDisabled);
+      resetForm();
+      this.setAddress(x, y, shift);
     },
-    setFormActive: function () {
-      if (noticeForm.classList.contains('notice__form--disabled') === true) {
-        noticeForm.classList.remove('notice__form--disabled');
-      }
+    setActive: function () {
+      noticeForm.classList.remove('notice__form--disabled');
+      [].forEach.call(formFields, removeDisabled);
     },
-    setFieldsActive: function () {
-      formFields.forEach(removeDisabled);
-    },
-    setFieldsDisabled: function () {
-      formFields.forEach(setDisabled);
-    },
-    address: addressField,
-    noticeForm: noticeForm,
-    reset: resetForm,
+    setAddress: function (x, y, shift) {
+      addressField.value = 'x: ' + x + ', y: ' + window.shift.getMainPinY(y, shift);
+    }
   };
 })();

@@ -1,10 +1,11 @@
 'use strict';
 
 // Отрисовка маркеров
-window.pin = (function () {
+(function () {
+  var TICKETS_NUMBER = 5;
   var pinWidth = 40;
   var pinHeight = 40;
-  var startMap = false;
+  var mapView = false;
   var map = document.querySelector('.map');
   var mapPin = document.querySelector('.map__pins');
   var fragment = document.createDocumentFragment();
@@ -15,21 +16,34 @@ window.pin = (function () {
     newPin.querySelector('img').width = pinWidth;
     newPin.querySelector('img').height = pinHeight;
     newPin.style.left = ticket.location.x + 'px';
-    newPin.style.top = window.shift.getPinShiftY(ticket.location.y, pinHeight) + 'px';
+    newPin.style.top = window.shift.getPinY(ticket.location.y, pinHeight) + 'px';
     newPin.setAttribute('data-number', String(ticketNumber));
     fragment.appendChild(newPin);
   }
 
-  return {
-    onMainPinMouseUp: function () {
-      if (startMap === false) {
-        map.classList.remove('map--faded');
-        window.form.setFormActive();
-        window.form.setFieldsActive();
-        [].forEach.call(window.data.tickets, addPinToFragment);
-        mapPin.appendChild(fragment);
-        startMap = true;
+  function removePin(parentNode) {
+    while (parentNode.childElementCount > 2) {
+      parentNode.removeChild(parentNode.lastChild);
+    }
+  }
+
+  function drawPinsOnMap() {
+    removePin(mapPin);
+    mapPin.appendChild(fragment);
+  }
+
+  window.pin = {
+    activate: function (mainPinNode, pinData) {
+      function onMainPinMouseUp() {
+        if (mapView === false) {
+          map.classList.remove('map--faded');
+          window.form.setActive();
+          [].forEach.call(pinData.slice(0, TICKETS_NUMBER), addPinToFragment);
+          mapPin.appendChild(fragment);
+          mapView = true;
+        }
       }
+      mainPinNode.addEventListener('mouseup', onMainPinMouseUp);
     },
     activatedPin: false,
     isActive: function (pin) {
@@ -48,5 +62,10 @@ window.pin = (function () {
     },
     map: map,
     mapMarker: mapPin,
+    showFiteredArray: function (customArray) {
+      var filteredPins = customArray.slice(0, TICKETS_NUMBER);
+      [].forEach.call(filteredPins, addPinToFragment);
+      window.debounce(drawPinsOnMap);
+    },
   };
 })();
