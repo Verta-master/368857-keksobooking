@@ -148,6 +148,14 @@
   houseType.addEventListener('change', onHouseTypeChange);
   roomNumber.addEventListener('change', onRoomNumberChange);
 
+  function uncheck(item) {
+    item.checked = false;
+  }
+
+  function disableOnRequest(item, index) {
+    item.disabled = (index !== 2) ? true : false;
+  }
+
   function resetForm() {
     titleField.value = '';
     houseType.value = InitialValue.TYPE;
@@ -156,14 +164,8 @@
     timeOutField.value = InitialValue.TIMEOUT;
     roomNumber.value = InitialValue.ROOM;
     capacity.value = InitialValue.CAPACITY;
-    for (var k = 0; k < capacity.length; k++) {
-      if (k !== 2) {
-        capacity[k].disabled = true;
-      }
-    }
-    for (k = 0; k < features.length; k++) {
-      features[k].checked = false;
-    }
+    [].forEach.call(capacity, disableOnRequest);
+    [].forEach.call(features, uncheck);
     description.value = '';
     imageLoad.value = '';
     while (uploadZone.childElementCount > 1) {

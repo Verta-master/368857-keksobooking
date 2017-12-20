@@ -31,27 +31,29 @@
     }
   });
 
-  imageFile.addEventListener('change', function () {
-    for (var i = 0; i < imageFile.files.length; i++) {
-      var file = imageFile.files[i];
-      var fileNames = file.name.toLowerCase();
+  function showPreview(element) {
+    var file = element;
+    var fileName = file.name.toLowerCase();
 
-      var matches = FILE_TYPES.some(function (item) {
-        return fileNames.endsWith(item);
+    var matches = FILE_TYPES.some(function (item) {
+      return fileName.endsWith(item);
+    });
+
+    if (matches) {
+      var reader = new FileReader();
+
+      reader.addEventListener('load', function () {
+        var img = document.createElement('IMG');
+        img.width = '40';
+        uploadImageArea.appendChild(img);
+        img.src = reader.result;
       });
-
-      if (matches) {
-        var reader = new FileReader();
-
-        reader.addEventListener('load', function () {
-          var img = document.createElement('IMG');
-          img.width = '40';
-          uploadImageArea.appendChild(img);
-          img.src = reader.result;
-        });
-        reader.readAsDataURL(file);
-      }
+      reader.readAsDataURL(file);
     }
+  }
+
+  imageFile.addEventListener('change', function () {
+    [].forEach.call(imageFile.files, showPreview);
   });
 
   // Загрузка drag-and-drop
@@ -93,17 +95,6 @@
     evt.stopPropagation();
     evt.preventDefault();
     evt.dataTransfer.dropEffect = 'copy';
-    for (var j = 0; j < evt.dataTransfer.files.length; j++) {
-      var file = evt.dataTransfer.files[j];
-      var reader = new FileReader();
-
-      reader.addEventListener('load', function () {
-        var img = document.createElement('IMG');
-        img.width = '40';
-        uploadImageArea.appendChild(img);
-        img.src = reader.result;
-      });
-      reader.readAsDataURL(file);
-    }
+    [].forEach.call(evt.dataTransfer.files, showPreview);
   });
 })();
