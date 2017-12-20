@@ -10,11 +10,11 @@
   var uploadImageArea = document.querySelector('.form__photo-container');
   var avatarFile = document.querySelector('#avatar');
   var imageFile = document.querySelector('#images');
+
   imageFile.setAttribute('multiple', true);
 
-  // Загрузка через input[type=file]
-  avatarFile.addEventListener('change', function () {
-    var file = avatarFile.files[0];
+  function showAvatar(element) {
+    var file = element;
     var fileName = file.name.toLowerCase();
 
     var matches = FILE_TYPES.some(function (item) {
@@ -29,7 +29,7 @@
       });
       reader.readAsDataURL(file);
     }
-  });
+  }
 
   function showPreview(element) {
     var file = element;
@@ -52,6 +52,11 @@
     }
   }
 
+  // Загрузка через input[type=file]
+  avatarFile.addEventListener('change', function () {
+    showAvatar(avatarFile.files[0]);
+  });
+
   imageFile.addEventListener('change', function () {
     [].forEach.call(imageFile.files, showPreview);
   });
@@ -71,13 +76,7 @@
     evt.stopPropagation();
     evt.preventDefault();
     evt.dataTransfer.dropEffect = 'copy';
-    var file = evt.dataTransfer.files[0];
-    var reader = new FileReader();
-
-    reader.addEventListener('load', function () {
-      avatarImage.src = reader.result;
-    });
-    reader.readAsDataURL(file);
+    showAvatar(evt.dataTransfer.files[0]);
   });
 
   imageDropZone.addEventListener('dragenter', function (evt) {
