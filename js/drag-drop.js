@@ -1,13 +1,67 @@
 'use strict';
 
-// работа с формой
+// Загрузка картинок
 (function () {
-  var dropZones = document.querySelectorAll('.drop-zone');
-  var avatarDropZone = dropZones[0];
-  var imageDropZone = dropZones[1];
+  var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+
+  var avatarDropZone = document.querySelector('.notice__photo .drop-zone');
+  var imageDropZone = document.querySelector('.form__photo-container .drop-zone');
   var avatarImage = document.querySelector('.notice__preview img');
   var uploadImageArea = document.querySelector('.form__photo-container');
+  var avatarFile = document.querySelector('#avatar');
+  var imageFile = document.querySelector('#images');
 
+  imageFile.setAttribute('multiple', true);
+
+  function showAvatar(element) {
+    var file = element;
+    var fileName = file.name.toLowerCase();
+
+    var matches = FILE_TYPES.some(function (item) {
+      return fileName.endsWith(item);
+    });
+
+    if (matches) {
+      var reader = new FileReader();
+
+      reader.addEventListener('load', function () {
+        avatarImage.src = reader.result;
+      });
+      reader.readAsDataURL(file);
+    }
+  }
+
+  function showPreview(element) {
+    var file = element;
+    var fileName = file.name.toLowerCase();
+
+    var matches = FILE_TYPES.some(function (item) {
+      return fileName.endsWith(item);
+    });
+
+    if (matches) {
+      var reader = new FileReader();
+
+      reader.addEventListener('load', function () {
+        var img = document.createElement('IMG');
+        img.width = '40';
+        uploadImageArea.appendChild(img);
+        img.src = reader.result;
+      });
+      reader.readAsDataURL(file);
+    }
+  }
+
+  // Загрузка через input[type=file]
+  avatarFile.addEventListener('change', function () {
+    showAvatar(avatarFile.files[0]);
+  });
+
+  imageFile.addEventListener('change', function () {
+    [].forEach.call(imageFile.files, showPreview);
+  });
+
+  // Загрузка drag-and-drop
   avatarDropZone.addEventListener('dragenter', function (evt) {
     evt.stopPropagation();
     evt.preventDefault();
@@ -22,14 +76,7 @@
     evt.stopPropagation();
     evt.preventDefault();
     evt.dataTransfer.dropEffect = 'copy';
-    var file = evt.dataTransfer.files[0];
-    var reader = new FileReader();
-
-    reader.addEventListener('load', function () {
-      avatarImage.src = reader.result;
-    });
-
-    reader.readAsDataURL(file);
+    showAvatar(evt.dataTransfer.files[0]);
   });
 
   imageDropZone.addEventListener('dragenter', function (evt) {
@@ -47,25 +94,6 @@
     evt.stopPropagation();
     evt.preventDefault();
     evt.dataTransfer.dropEffect = 'copy';
-    var file = evt.dataTransfer.files[0];
-    var reader = new FileReader();
-
-    reader.addEventListener('load', function () {
-      var img = document.createElement('IMG');
-      img.width = '100';
-      uploadImageArea.appendChild(img);
-      img.src = reader.result;
-      img.setAttribute('draggable', true);
-    });
-
-    reader.readAsDataURL(file);
+    [].forEach.call(evt.dataTransfer.files, showPreview);
   });
-
-  imageDropZone.addEventListener('dragstart', function (evt) {
-    if (evt.target.tagName.toLowerCase() === 'img') {
-      // var draggedItem = evt.target;
-      evt.dataTransfer.setData('text/plain', evt.target.alt);
-    }
-  });
-
 })();

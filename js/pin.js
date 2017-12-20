@@ -3,8 +3,9 @@
 // Отрисовка маркеров
 (function () {
   var TICKETS_NUMBER = 5;
-  var pinWidth = 40;
-  var pinHeight = 40;
+  var CHILDREN_NUMBER = 2;
+  var PIN_WIDTH = 40;
+  var PIN_HEIGHT = 40;
   var mapView = false;
   var map = document.querySelector('.map');
   var mapPin = document.querySelector('.map__pins');
@@ -13,16 +14,17 @@
   function addPinToFragment(ticket, ticketNumber) {
     var newPin = document.querySelector('template').content.querySelector('.map__pin').cloneNode(true);
     newPin.querySelector('img').src = ticket.author.avatar;
-    newPin.querySelector('img').width = pinWidth;
-    newPin.querySelector('img').height = pinHeight;
+    newPin.querySelector('img').width = PIN_WIDTH;
+    newPin.querySelector('img').height = PIN_HEIGHT;
     newPin.style.left = ticket.location.x + 'px';
-    newPin.style.top = window.shift.getPinY(ticket.location.y, pinHeight) + 'px';
+    newPin.style.top = window.shift.getPinY(ticket.location.y, PIN_HEIGHT) + 'px';
     newPin.setAttribute('data-number', String(ticketNumber));
     fragment.appendChild(newPin);
   }
 
+  // удаление узлов выполняется, ориентируясь на порядок размещения в верстке
   function removePin(parentNode) {
-    while (parentNode.childElementCount > 2) {
+    while (parentNode.childElementCount > CHILDREN_NUMBER) {
       parentNode.removeChild(parentNode.lastChild);
     }
   }

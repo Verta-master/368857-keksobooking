@@ -2,6 +2,7 @@
 
 // работа с формой
 (function () {
+  var CHILDREN_NUMBER = 1;
   var Price = {
     MIN: 1E3,
     MAX: 1E6
@@ -18,10 +19,11 @@
     ROOM: 1,
     CAPACITY: 1
   };
-  var Room = {
-    FLAT: '2',
-    HOUSE: '3',
-    PALACE: '100'
+  var RoomToGuest = {
+    1: ['1'],
+    2: ['1', '2'],
+    3: ['1', '2', '3'],
+    100: ['0']
   };
   var minPrices = {
     bungalo: 0,
@@ -29,6 +31,7 @@
     house: 5000,
     palace: 10000
   };
+  var ROOM_PALACE = '100';
   var formFields = document.querySelectorAll('fieldset');
   var noticeForm = document.querySelector('.notice__form');
   var addressField = noticeForm.querySelector('#address');
@@ -105,28 +108,15 @@
   }
 
   function onRoomNumberChange() {
-    capacity.value = (roomNumber.value !== Room.PALACE) ? roomNumber.value : 0;
-    if (roomNumber.value === Room.HOUSE) {
-      for (var i = 0; i < capacity.length - 1; i++) {
-        capacity.options[i].removeAttribute('disabled');
+    capacity.value = (roomNumber.value !== ROOM_PALACE) ? roomNumber.value : 0;
+    var guests = RoomToGuest[roomNumber.value];
+    [].forEach.call(capacity.options, function (item) {
+      if (guests.includes(item.value)) {
+        item.removeAttribute('disabled');
+      } else {
+        item.setAttribute('disabled', 'disabled');
       }
-      capacity.options[capacity.length - 1].setAttribute('disabled', 'disabled');
-    } else if (roomNumber.value === Room.FLAT) {
-      for (i = 1; i < capacity.length - 1; i++) {
-        capacity.options[i].removeAttribute('disabled');
-      }
-      capacity.options[0].setAttribute('disabled', 'disabled');
-      capacity.options[capacity.length - 1].setAttribute('disabled', 'disabled');
-    } else {
-      var index = capacity.length - capacity.value - 1;
-      for (i = 0; i < capacity.length; i++) {
-        if (i === index) {
-          capacity.options[i].removeAttribute('disabled');
-        } else {
-          capacity.options[i].setAttribute('disabled', 'disabled');
-        }
-      }
-    }
+    });
   }
 
   noticeForm.setAttribute('action', 'https://js.dump.academy/keksobooking');
@@ -148,6 +138,14 @@
   houseType.addEventListener('change', onHouseTypeChange);
   roomNumber.addEventListener('change', onRoomNumberChange);
 
+  function uncheck(item) {
+    item.checked = false;
+  }
+
+  function disableOnRequest(item, index) {
+    item.disabled = (index !== 2) ? true : false;
+  }
+
   function resetForm() {
     titleField.value = '';
     houseType.value = InitialValue.TYPE;
@@ -156,17 +154,12 @@
     timeOutField.value = InitialValue.TIMEOUT;
     roomNumber.value = InitialValue.ROOM;
     capacity.value = InitialValue.CAPACITY;
-    for (var k = 0; k < capacity.length; k++) {
-      if (k !== 2) {
-        capacity[k].disabled = true;
-      }
-    }
-    for (k = 0; k < features.length; k++) {
-      features[k].checked = false;
-    }
+    [].forEach.call(capacity, disableOnRequest);
+    [].forEach.call(features, uncheck);
     description.value = '';
     imageLoad.value = '';
-    while (uploadZone.childElementCount > 1) {
+    // удаление узлов выполняется, ориентируясь на порядок размещения в верстке
+    while (uploadZone.childElementCount > CHILDREN_NUMBER) {
       uploadZone.removeChild(uploadZone.lastChild);
     }
   }
